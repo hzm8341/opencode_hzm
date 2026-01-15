@@ -1,0 +1,77 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "$comment": "完整配置模板 - 包含所有可选配置项 / Complete configuration template - includes all optional items",
+  "$comment_zh": "此模板包含所有可用的配置选项，可根据需要调整 / This template includes all available configuration options, adjust as needed",
+  "$comment_v3": "v3.0版本：移除Antigravity，使用官方API和OpenCode Zen / v3.0: Removed Antigravity, using official APIs and OpenCode Zen",
+  
+  "plugin": [
+    "oh-my-opencode"
+  ],
+  
+  // 默认模型（推荐使用OpenCode Zen免费模型）/ Default model (recommended: OpenCode Zen free model)
+  "model": "opencode/big-pickle",
+  
+  // Provider配置（可选，如果使用自定义Provider）/ Provider configuration (optional, if using custom providers)
+  // API密钥通过环境变量设置，不要硬编码在配置文件中 / API keys should be set via environment variables, do not hardcode in config file
+  "provider": {
+    // Anthropic配置示例 / Anthropic configuration example
+    "anthropic": {
+      "options": {
+        // API密钥通过环境变量设置: export ANTHROPIC_API_KEY="sk-ant-xxx"
+        // API key set via environment variable: export ANTHROPIC_API_KEY="sk-ant-xxx"
+      }
+    },
+    
+    // OpenAI配置示例 / OpenAI configuration example
+    "openai": {
+      "options": {
+        // API密钥通过环境变量设置: export OPENAI_API_KEY="sk-xxx"
+        // API key set via environment variable: export OPENAI_API_KEY="sk-xxx"
+      }
+    },
+    
+    // Google配置示例 / Google configuration example
+    "google": {
+      "options": {
+        // API密钥通过环境变量设置: export GOOGLE_GENERATIVE_AI_API_KEY="xxx"
+        // API key set via environment variable: export GOOGLE_GENERATIVE_AI_API_KEY="xxx"
+      }
+    }
+  },
+  
+  // Agent配置 / Agent configuration
+  "agent": {
+    "frontend-ui-ux-engineer": {
+      "model": "opencode/gpt-5.1-codex",
+      "description": "专业的前端UI/UX工程师 / Professional frontend UI/UX engineer",
+      "temperature": 0.7
+    },
+    "document-writer": {
+      "model": "opencode/big-pickle",
+      "description": "文档编写者 / Document writer",
+      "temperature": 0.5
+    },
+    "multimodal-looker": {
+      "model": "google/gemini-3-pro",
+      "description": "多模态查看器 / Multimodal looker",
+      "temperature": 0.6
+    },
+    "oracle": {
+      "model": "anthropic/claude-sonnet-4-20250514",
+      "description": "架构师，负责架构设计和代码审查 / Architect, responsible for architecture design and code review"
+    },
+    "librarian": {
+      "model": "opencode/big-pickle",
+      "description": "图书馆员，负责文档查找和代码库分析 / Librarian, responsible for document search and codebase analysis"
+    }
+  },
+  
+  // 其他配置（根据项目需要） / Other configurations (as needed)
+  "instructions": [],
+  "mcp": {},
+  "tools": {
+    "github-triage": false,
+    "github-pr-search": false
+  }
+}
+

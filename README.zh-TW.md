@@ -68,6 +68,15 @@ OPENCODE_INSTALL_DIR=/usr/local/bin curl -fsSL https://opencode.ai/install | bas
 XDG_BIN_DIR=$HOME/.local/bin curl -fsSL https://opencode.ai/install | bash
 ```
 
+### 主要特性
+
+- 🤖 **多模型支援** - 支援 Claude、OpenAI、Google 或本地模型
+- 🖥️ **終端介面** - 專為終端使用者打造的強大 TUI
+- 🌐 **Web 介面** - 可透過瀏覽器或桌面應用程式存取
+- 🔌 **外掛系統** - 可擴充，支援 Oh My OpenCode 等外掛
+- 📝 **LSP 支援** - 開箱即用的語言伺服器協定支援
+- 🔐 **多代理系統** - 針對不同任務的專業化代理
+
 ### Agents
 
 OpenCode 內建了兩種 Agent，您可以使用 `Tab` 鍵快速切換。
@@ -82,9 +91,100 @@ OpenCode 內建了兩種 Agent，您可以使用 `Tab` 鍵快速切換。
 
 了解更多關於 [Agents](https://opencode.ai/docs/agents) 的資訊。
 
+### 工作流程最佳實踐
+
+**⚠️ 計劃優先原則**
+
+在開始任何新任務前，**必須先使用 `plan` agent 制定詳細計劃**，然後使用 `build` agent 逐步實施。這能提高程式碼品質、減少返工，並便於追蹤進度。
+
+```bash
+# 步驟1：制定計劃
+bun dev run --agent plan --model opencode/gpt-5-nano \
+  "請制定詳細計劃：[你的任務]。保存到docs/任務名_plan_v1.0_$(date +%Y%m%d)_AI.md"
+
+# 步驟2：根據計劃實施
+bun dev run --agent build --model opencode/grok-code \
+  "根據docs/任務名_plan_v1.0_日期_AI.md實施..."
+```
+
+詳細使用說明請查看 [USAGE_GUIDE.md](./USAGE_GUIDE.md)。
+
+### 進階功能
+
+#### Oh My OpenCode 外掛
+
+將您的 AI Agent 轉變為完整的開發團隊，提供專業化 Agent、ultrawork 模式和並行任務執行。
+
+**主要特性：**
+- 🤖 **專業化 Agent 團隊** - Oracle、Librarian、Explore、Frontend Engineer 等
+- 🔄 **Sisyphus Agent** - 永不放棄機制，自動重試和錯誤修復
+- 🪄 **Ultrawork 模式** - 處理複雜任務，自動分解和並行執行
+- 🛠️ **LSP/AST 工具** - 進階程式碼分析能力
+
+```bash
+# 安裝
+bunx oh-my-opencode install
+
+# 使用 ultrawork 模式
+opencode run "ultrawork: 重構整個 TypeScript 程式碼庫"
+
+# 使用專業化 Agent
+opencode run "@oracle 分析專案架構"
+opencode run "@librarian 查找 React Hooks 最佳實踐"
+```
+
+更多資訊請查看 [USAGE_GUIDE.md](./USAGE_GUIDE.md#oh-my-opencode-插件使用指南)。
+
+#### Claude SDK Adapter
+
+相容層，允許使用 Claude Agent SDK 介面與 OpenCode 的代理系統互動。完全獨立，僅使用 OpenCode 的內部 API。
+
+```typescript
+import { query } from "@/claude-sdk-adapter"
+import { bootstrap } from "@/cli/bootstrap"
+
+await bootstrap("/path/to/project", async () => {
+  const q = query({
+    prompt: "整理當前目錄下的檔案",
+    options: { cwd: "/path/to/project" },
+  })
+  
+  for await (const message of q) {
+    console.log(message)
+  }
+})
+```
+
+更多資訊請查看 [USAGE_GUIDE.md](./USAGE_GUIDE.md#claude-sdk-adapter-使用指南)。
+
+#### Skills 系統
+
+透過模組化、自包含的技能包擴展 AI Agent 的能力，提供專業化領域支援。
+
+**可用 Skills：**
+- 📄 **文件處理**：PDF、DOCX、PPTX、XLSX
+- 🎨 **設計與創作**：Frontend Design、Canvas Design、Algorithmic Art、Theme Factory
+- 🌐 **Web 開發**：Web Artifacts Builder、Webapp Testing
+- 🛠️ **工具與整合**：MCP Builder、Skill Creator
+- 💬 **通訊協作**：Internal Comms、Doc Coauthoring
+
+Skills 會在需要時自動發現和載入。您也可以明確引用它們：
+
+```bash
+# 使用 PDF skill
+bun dev run "使用pdf skill提取document.pdf中的文字"
+
+# 組合使用多個 skills
+bun dev run "使用pptx skill和theme-factory skill建立簡報，套用Modern Minimalist主題"
+```
+
+更多資訊請查看 [USAGE_GUIDE.md](./USAGE_GUIDE.md#skills-使用指南)。
+
 ### 線上文件
 
 關於如何設定 OpenCode 的詳細資訊，請參閱我們的 [**官方文件**](https://opencode.ai/docs)。
+
+- **使用指南**: [USAGE_GUIDE.md](./USAGE_GUIDE.md) - 包含安裝、設定、工作流程和進階功能的完整指南
 
 ### 參與貢獻
 

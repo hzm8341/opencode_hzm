@@ -1,0 +1,14 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "$comment": "最小化配置模板 - 只包含必需配置项 / Minimal configuration template - only essential items",
+  "$comment_zh": "此模板只包含最基本的配置，适合快速开始 / This template contains only the most basic configuration, suitable for quick start",
+  "$comment_v3": "v3.0版本：移除Antigravity，使用官方API和OpenCode Zen / v3.0: Removed Antigravity, using official APIs and OpenCode Zen",
+  
+  "plugin": [
+    "oh-my-opencode"
+  ],
+  
+  // 默认使用OpenCode Zen免费模型 / Default to OpenCode Zen free model
+  "model": "opencode/big-pickle"
+}
+

@@ -1,0 +1,3 @@
+Skill URL: https://agentskills.io/skills/git-pr-reviewer
+Source: agentskills.io
+Note: 请访问 https://agentskills.io/skills/git-pr-reviewer 获取完整的skill文件

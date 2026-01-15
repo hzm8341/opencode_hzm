@@ -68,6 +68,15 @@ OPENCODE_INSTALL_DIR=/usr/local/bin curl -fsSL https://opencode.ai/install | bas
 XDG_BIN_DIR=$HOME/.local/bin curl -fsSL https://opencode.ai/install | bash
 ```
 
+### Key Features
+
+- 🤖 **Multi-model support** - Works with Claude, OpenAI, Google, or local models
+- 🖥️ **Terminal interface** - Built for terminal users with powerful TUI
+- 🌐 **Web interface** - Access via browser or desktop app
+- 🔌 **Plugin system** - Extensible with plugins like Oh My OpenCode
+- 📝 **LSP support** - Out-of-the-box language server protocol support
+- 🔐 **Multi-agent system** - Specialized agents for different tasks
+
 ### Agents
 
 OpenCode includes two built-in agents you can switch between with the `Tab` key.
@@ -83,9 +92,100 @@ This is used internally and can be invoked using `@general` in messages.
 
 Learn more about [agents](https://opencode.ai/docs/agents).
 
+### Workflow Best Practices
+
+**⚠️ Planning First Principle**
+
+Before starting any new task, **always create a detailed plan** using the `plan` agent, then implement it step by step with the `build` agent. This ensures better code quality, reduces rework, and facilitates progress tracking.
+
+```bash
+# Step 1: Create a plan
+bun dev run --agent plan --model opencode/gpt-5-nano \
+  "Create a detailed plan: [your task]. Save to docs/task_plan_v1.0_$(date +%Y%m%d)_AI.md"
+
+# Step 2: Implement based on the plan
+bun dev run --agent build --model opencode/grok-code \
+  "Implement according to docs/task_plan_v1.0_date_AI.md"
+```
+
+For detailed usage instructions, see [USAGE_GUIDE.md](./USAGE_GUIDE.md).
+
+### Advanced Features
+
+#### Oh My OpenCode Plugin
+
+Transform your AI agent into a full development team with specialized agents, ultrawork mode, and parallel task execution.
+
+**Key Features:**
+- 🤖 **Specialized Agent Team** - Oracle, Librarian, Explore, Frontend Engineer, and more
+- 🔄 **Sisyphus Agent** - Never-give-up mechanism with automatic retry and error fixing
+- 🪄 **Ultrawork Mode** - Handle complex tasks with automatic task decomposition and parallel execution
+- 🛠️ **LSP/AST Tools** - Advanced code analysis capabilities
+
+```bash
+# Install
+bunx oh-my-opencode install
+
+# Use ultrawork mode
+opencode run "ultrawork: Refactor the entire TypeScript codebase"
+
+# Use specialized agents
+opencode run "@oracle Analyze the project architecture"
+opencode run "@librarian Find React Hooks best practices"
+```
+
+Learn more in [USAGE_GUIDE.md](./USAGE_GUIDE.md#oh-my-opencode-插件使用指南).
+
+#### Claude SDK Adapter
+
+A compatibility layer that allows using Claude Agent SDK interfaces with OpenCode's agent system. Fully independent, using only OpenCode's internal APIs.
+
+```typescript
+import { query } from "@/claude-sdk-adapter"
+import { bootstrap } from "@/cli/bootstrap"
+
+await bootstrap("/path/to/project", async () => {
+  const q = query({
+    prompt: "Organize files in the current directory",
+    options: { cwd: "/path/to/project" },
+  })
+  
+  for await (const message of q) {
+    console.log(message)
+  }
+})
+```
+
+Learn more in [USAGE_GUIDE.md](./USAGE_GUIDE.md#claude-sdk-adapter-使用指南).
+
+#### Skills System
+
+Extend AI Agent capabilities with modular, self-contained skill packages for specialized domains.
+
+**Available Skills:**
+- 📄 **Document Processing**: PDF, DOCX, PPTX, XLSX
+- 🎨 **Design & Creation**: Frontend Design, Canvas Design, Algorithmic Art, Theme Factory
+- 🌐 **Web Development**: Web Artifacts Builder, Webapp Testing
+- 🛠️ **Tools & Integration**: MCP Builder, Skill Creator
+- 💬 **Communication**: Internal Comms, Doc Coauthoring
+
+Skills are automatically discovered and loaded when needed. You can also explicitly reference them:
+
+```bash
+# Use PDF skill
+bun dev run "Use pdf skill to extract text from document.pdf"
+
+# Combine multiple skills
+bun dev run "Use pptx skill and theme-factory skill to create a presentation with Modern Minimalist theme"
+```
+
+Learn more in [USAGE_GUIDE.md](./USAGE_GUIDE.md#skills-使用指南).
+
 ### Documentation
 
 For more info on how to configure OpenCode [**head over to our docs**](https://opencode.ai/docs).
+
+- **Usage Guide**: [USAGE_GUIDE.md](./USAGE_GUIDE.md) - Comprehensive guide with installation, configuration, workflows, and advanced features
 
 ### Contributing
 

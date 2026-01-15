@@ -1,0 +1,3 @@
+Skill URL: https://agentskills.io/skills/presentation-builder
+Source: agentskills.io
+Note: 请访问 https://agentskills.io/skills/presentation-builder 获取完整的skill文件

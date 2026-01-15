@@ -1,0 +1,13 @@
+GitHub URLs:
+https://github.com/anthropics/skills/tree/main/skills/data-analysis
+https://github.com/anthropics/skills/tree/main/skills/research-assistant
+https://github.com/vercel/agent-skills
+https://github.com/anthropics/skills/tree/main/skills/skill-creator
+
+Agentskills.io URLs:
+https://agentskills.io/skills/linear-integration
+https://agentskills.io/skills/git-pr-reviewer
+https://agentskills.io/skills/pdf-deep-reader
+https://agentskills.io/skills/postgres-admin
+https://agentskills.io/skills/brand-voice-guard
+https://agentskills.io/skills/presentation-builder
