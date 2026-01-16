@@ -1,8 +1,8 @@
 # OpenCode 使用指南
 
-**版本**: v1.4  
+**版本**: v1.5  
 **日期**: 2025-01-07  
-**最后更新**: 2026-01-25  
+**最后更新**: 2026-01-16  
 **合并说明**: 已合并 USAGE_GUIDE_temp.md 的内容
 
 ---
@@ -39,6 +39,7 @@
 - [功能使用说明](#功能使用说明)
   - [使用方法](#使用方法)
   - [Oh My OpenCode 插件使用指南](#oh-my-opencode-插件使用指南)
+  - [统一Agent执行流程使用指南](#统一agent执行流程使用指南)
   - [Claude SDK Adapter 使用指南](#claude-sdk-adapter-使用指南)
   - [Skills 使用指南](#skills-使用指南)
   - [快速参考](#快速参考)
@@ -1124,6 +1125,13 @@ bun dev run --agent plan "任务2" /path/to/project2
 
 ## 更新日志
 
+### v1.5 (2026-01-16)
+
+- 添加统一Agent执行流程使用指南
+- 添加6步执行流程说明
+- 添加端到端验证系统使用说明
+- 添加统一流程与现有功能集成说明
+
 ### v1.4 (2026-01-25)
 
 - 添加 Oh My OpenCode 插件使用指南
@@ -1878,6 +1886,386 @@ cat ~/.config/opencode/opencode.json
 
 ---
 
+## 统一Agent执行流程使用指南
+
+### 概述
+
+**统一Agent执行流程**是Oh My OpenCode插件的一个核心功能，它允许你通过一句话输入自动触发完整的6步执行流程，从任务解析到结果交付，全程自动化执行。
+
+**Unified Agent Execution Flow** is a core feature of the Oh My OpenCode plugin that allows you to trigger a complete 6-step execution flow with a single sentence input, from task parsing to result delivery, all automated.
+
+### 主要特性
+
+- 🎯 **自动任务解析**: 自动识别任务类型，提取成功标准
+- 📋 **智能拆解**: 自动创建详细计划并通过审查
+- ⚡ **并行执行**: 多线程处理，实时进度跟踪
+- 🔨 **综合构建**: 信息融合，逻辑构建
+- ✅ **质量保证**: 自检修正，端到端验证
+- 📦 **结果交付**: 按需格式化，执行摘要
+
+### 6步执行流程
+
+统一流程包含以下6个阶段：
+
+1. **阶段1: 任务解析** - 理解核心需求，明确交付标准
+2. **阶段2: 智能拆解** - 分解为可执行步骤，确定资源需求
+3. **阶段3: 并行执行** - 多线程收集/处理，实时进度跟踪
+4. **阶段4: 综合构建** - 信息融合，逻辑构建
+5. **阶段5: 质量保证** - 自检修正，端到端验证
+6. **阶段6: 结果交付** - 按需格式化，附上执行摘要
+
+### 使用方法
+
+#### 基本使用
+
+统一流程系统已自动集成，只需在提示词中包含触发关键词即可：
+
+**The unified flow system is automatically integrated. Just include trigger keywords in your prompt:**
+
+```bash
+# 方式1: 自动触发（推荐）
+cd /path/to/your/project
+bun dev run "帮我将当前的项目demo运行起来"
+
+# 方式2: 显式触发
+bun dev run "unified-flow: 运行demo"
+
+# 方式3: 使用oh-my-opencode命令
+bunx oh-my-opencode run "帮我将当前的项目demo运行起来"
+```
+
+#### 触发关键词
+
+系统会自动检测以下关键词并触发统一流程：
+
+**The system automatically detects the following keywords to trigger unified flow:**
+
+**中文关键词**:
+- "帮我"
+- "帮我将"
+- "运行demo"
+- "运行demo起来"
+- "启动"
+- "帮我运行"
+- "帮我启动"
+- "自动完成"
+- "完整流程"
+
+**英文关键词**:
+- "unified-flow"
+- "auto complete"
+- "run demo"
+- "help me"
+
+**模式匹配**:
+- `/帮我.*(运行|启动|完成|实现)/`
+- `/将.*(运行|启动)起来/`
+- `/自动.*(完成|实现|处理)/`
+
+### 使用示例
+
+#### 示例1: 运行Demo
+
+```bash
+cd /path/to/your/project
+bun dev run "帮我将当前的项目demo运行起来"
+```
+
+**执行流程**:
+1. **阶段1**: 系统识别任务类型为"run_demo"，收集项目信息（package.json、启动脚本等）
+2. **阶段2**: 创建详细计划（检查依赖、配置环境、启动服务）
+3. **阶段3-4**: 执行计划，启动服务
+4. **阶段5**: 端到端验证（检查服务是否真正运行，HTTP健康检查）
+5. **阶段6**: 生成执行摘要，自动退出
+
+#### 示例2: 修复Bug
+
+```bash
+cd /path/to/your/project
+bun dev run "修复登录功能中的空指针异常"
+```
+
+**执行流程**:
+1. **阶段1**: 识别任务类型为"fix_bug"，收集相关代码和错误信息
+2. **阶段2**: 创建计划（定位bug、分析原因、修复、测试）
+3. **阶段3-4**: 执行修复
+4. **阶段5**: 验证bug是否真正修复（复现原始场景、运行测试）
+5. **阶段6**: 生成修复报告
+
+#### 示例3: 添加功能
+
+```bash
+cd /path/to/your/project
+bun dev run "添加用户头像上传功能"
+```
+
+**执行流程**:
+1. **阶段1**: 识别任务类型为"add_feature"，收集相关代码和文档
+2. **阶段2**: 创建计划（设计API、实现后端、实现前端、测试）
+3. **阶段3-4**: 并行执行多个任务
+4. **阶段5**: 功能验证（测试新功能、验证需求）
+5. **阶段6**: 生成功能实现报告
+
+### 配置
+
+#### 启用/禁用统一流程
+
+统一流程Hook默认启用。可以通过配置文件禁用：
+
+**The unified flow hook is enabled by default. You can disable it via config:**
+
+在 `oh-my-opencode.json` 中配置：
+
+```json
+{
+  "disabled_hooks": []  // 不包含 "unified-flow" 则默认启用
+}
+```
+
+禁用统一流程：
+
+```json
+{
+  "disabled_hooks": ["unified-flow"]
+}
+```
+
+### 端到端验证系统
+
+统一流程的核心创新是**端到端验证系统**，确保任务真正完成，而不仅仅是代码质量检查。
+
+**The core innovation of unified flow is the end-to-end verification system, ensuring tasks are truly completed, not just code quality checks.**
+
+#### 验证方法
+
+系统支持多种验证方法：
+
+- **http_check**: HTTP健康检查（用于Web服务）
+- **port_check**: 端口监听检查（用于服务）
+- **test_run**: 测试运行（用于功能验证）
+- **command_check**: 命令输出检查（用于CLI工具）
+- **manual_check**: 手动检查（用于复杂场景）
+
+#### 验证示例
+
+在阶段5中，系统会自动调用验证工具：
+
+```typescript
+// 系统自动调用（无需手动）
+verification(
+  taskType="run_demo",
+  taskDescription="运行项目demo",
+  successCriteria={
+    type: "run_demo",
+    description: "Demo服务运行成功",
+    verification: {
+      method: "http_check",
+      target: "http://localhost:3000",
+      expected: "200 OK",
+      timeout: 30000
+    }
+  }
+)
+```
+
+### 状态管理
+
+#### 状态文件位置
+
+执行状态保存在：
+```
+.sisyphus/execution-state/{session-id}.json
+```
+
+#### 状态恢复
+
+如果会话中断，系统会自动恢复状态：
+- 从状态文件读取
+- 继续执行当前阶段
+- 保持上下文
+
+### 与现有功能集成
+
+统一流程完全兼容OpenCode和Oh My OpenCode的现有功能：
+
+```bash
+# 使用plan agent + 统一流程
+bun dev run --agent plan "帮我制定详细计划：实现用户认证系统"
+
+# 使用build agent + 统一流程
+bun dev run --agent build "帮我将当前的项目demo运行起来"
+
+# 使用ultrawork模式 + 统一流程
+bun dev run "ultrawork: 帮我完成整个项目的重构"
+
+# 使用专业化Agent + 统一流程
+bun dev run "@oracle 帮我分析项目架构并提出改进方案"
+```
+
+### 用户交互功能
+
+统一流程支持在需要用户输入时自动暂停并提示用户。
+
+#### 支持的交互类型
+
+1. **密码输入** (`password`)
+   - 用于需要sudo密码等敏感输入
+   - 输入会被隐藏
+
+2. **文本输入** (`text`)
+   - 用于需要用户提供文本信息
+   - 支持默认值
+
+3. **确认** (`confirm`)
+   - 用于需要用户确认的操作
+   - 支持默认选择（yes/no）
+
+4. **选择** (`select`)
+   - 用于需要用户从多个选项中选择
+   - 支持单选和多选
+
+#### 使用场景
+
+**场景1：需要sudo密码**
+```bash
+# Agent会自动检测sudo密码提示并暂停
+bun dev run "帮我安装系统依赖包"
+# 当需要sudo时，系统会提示：
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# 🔐 SUDO PASSWORD REQUIRED
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# 请在TUI界面输入sudo密码
+```
+
+**场景2：需要用户确认**
+```bash
+# Agent会自动检测确认提示
+bun dev run "帮我删除临时文件"
+# 当需要确认时，系统会提示：
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# ❓ USER CONFIRMATION REQUIRED
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# 请确认是否继续
+```
+
+**场景3：需要用户选择**
+```bash
+# Agent会自动检测选择提示
+bun dev run "帮我选择数据库类型"
+# 系统会显示选项供用户选择
+```
+
+#### 工作原理
+
+1. **自动检测**：Agent在执行命令后自动检测输出中是否包含用户输入提示
+   - sudo密码提示：`"sudo: a password is required"`, `"[sudo] password for"`
+   - 确认提示：`"Are you sure?"`, `"Continue?"`, `"Y/n"`
+   - 交互提示：`"Enter"`, `"Input"`, `"Please provide"`
+
+2. **暂停执行**：检测到需要用户输入时，系统自动暂停执行
+
+3. **显示提示**：在TUI界面显示清晰的提示信息，说明需要什么输入以及为什么需要
+
+4. **等待输入**：等待用户在TUI界面提供输入
+
+5. **继续执行**：用户提供输入后，系统自动继续执行
+
+#### 注意事项
+
+- **安全性**：密码输入会被隐藏，不会在日志中显示
+- **超时**：可以设置超时时间，超时后可以取消或使用默认值
+- **取消**：用户可以随时取消交互，系统会相应地处理
+- **自动继续**：用户提供输入后，系统会自动继续执行，无需手动恢复
+
+### 最佳实践
+
+#### 1. 明确的任务描述
+
+**好的示例**:
+```bash
+bun dev run "帮我将当前的项目demo运行起来"
+```
+
+**不好的示例**:
+```bash
+bun dev run "做点什么"
+```
+
+#### 2. 等待阶段完成
+
+每个阶段需要时间完成，请耐心等待。系统会在阶段完成时自动转换。
+
+#### 3. 检查状态文件
+
+如果遇到问题，检查状态文件了解当前进度：
+
+```bash
+cat .sisyphus/execution-state/{session-id}.json
+```
+
+#### 4. 及时响应交互提示
+
+当系统提示需要输入时，及时在TUI界面提供输入，避免长时间等待。
+
+### 故障排查
+
+#### 问题1: 统一流程未触发
+
+**症状**: 输入包含关键词但未触发统一流程
+
+**解决方案**:
+1. 检查Hook是否启用
+   ```bash
+   cat ~/.config/opencode/oh-my-opencode.json
+   ```
+
+2. 检查日志
+   ```bash
+   bun dev run --print-logs "测试"
+   ```
+
+3. 显式触发
+   ```bash
+   bun dev run "unified-flow: 你的任务"
+   ```
+
+#### 问题2: 阶段未转换
+
+**症状**: Phase 1完成后未自动转换到Phase 2
+
+**可能原因**:
+- 成功标准未正确提取
+- 状态文件未更新
+- Agent输出格式不符合预期
+
+**解决方案**:
+1. 检查状态文件
+   ```bash
+   cat .sisyphus/execution-state/{session-id}.json
+   ```
+
+2. 检查Agent输出
+   - 确保输出包含"PHASE 1 COMPLETE"标记
+   - 确保成功标准格式正确
+
+#### 问题3: 验证失败
+
+**症状**: 端到端验证失败
+
+**解决方案**:
+1. 检查服务是否真正运行
+2. 检查验证目标是否正确（URL、端口等）
+3. 查看验证证据
+4. 手动验证后重试
+
+### 相关文档
+
+- **开发计划**: `docs/统一Agent执行流程开发计划_v1.0_20260116_AI.md`
+- **技术审查**: `docs/统一Agent执行流程开发计划_技术审查报告_v1.0_20260116_AI.md`
+- **使用指南**: `docs/统一Agent执行流程_使用指南_v1.0_20260116_AI.md`
+- **端到端验证系统设计**: `docs/统一Agent执行流程_端到端验证系统设计_v1.0_20260116_AI.md`
+
+---
 
 ## Claude SDK Adapter 使用指南
 
@@ -2725,6 +3113,25 @@ opencode run "ultrawork: @oracle 分析架构，@frontend-ui-ux-engineer 实现�
 # 与计划工作流结合
 opencode run --agent plan "@oracle 分析需求，制定详细计划" --model opencode/gpt-5-nano
 opencode run --agent build "ultrawork: 根据计划文档实施" --model opencode/grok-code
+
+# === 统一Agent执行流程使用
+# 自动触发统一流程（使用触发关键词）
+bun dev run "帮我将当前的项目demo运行起来"
+bun dev run "自动完成用户登录功能"
+bun dev run "帮我运行demo"
+
+# 显式触发统一流程
+bun dev run "unified-flow: 运行demo"
+bun dev run "统一流程: 修复登录bug"
+
+# 与plan agent结合
+bun dev run --agent plan "帮我制定详细计划：实现用户认证系统"
+
+# 与build agent结合
+bun dev run --agent build "帮我将当前的项目demo运行起来"
+
+# 与ultrawork模式结合
+bun dev run "ultrawork: 帮我完成整个项目的重构"
 
 # === 从OpenCode目录运行（指定项目路径）/ Run from OpenCode directory (specify project path) ===
 cd /media/hzm/Data/github/opencode

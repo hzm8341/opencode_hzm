@@ -1,0 +1,293 @@
+西西弗斯式AI编程：永不放弃的Agent，干翻200刀的Claude Code
+原创 国华 硅基思维 2026年1月10日 13:57 北京
+
+硅基思维
+
+提供前沿、深入的AI知识与切实可行的应用技巧。 助你掌握AI核心概念、理解行业趋势，…
+43篇原创内容
+公众号
+
+一直以来最受欢迎的AI CLI是Claude Code。
+这玩意儿确实好用，Anthropic官方出品，直接在终端里跟Claude对话写代码，体验丝
+滑。后来OpenAI也坐不住了，搞了个Codex来对标。
+但问题来了：这俩都只能用自家的模型。
+
+只能用Claude，Codex只能用GPT。你想换个模型？不好意思，不支持。
+被锁死在一个生态里的感觉，懂的都懂。
+Claude Code
+
+所以开源社区就有人搞了个替代品，叫 Open Code。
+这东西的定位很清晰：免费、开源、可控。 你可以用自己的API Key，想用哪个模型用
+哪个模型，Claude、GPT、Gemini、甚至国产模型都行。不用被绑死在某个订阅上。
+但 Open Code 本身也有一些局限性，于是又有人在它基础上搞了个升级版框架——Oh
+My Open Code 。
+这个框架的思路非常有意思，它把一个单打独斗的 AI 助手，变成了一个有分工协作
+的"AI开发团队"。
+先说说最佳实践组合： OpenCode + oh-my-opencode + opencode-antigravityauth 。
+
+⚠️ 重要警告，说三遍：
+不要把 Claude Code / Codex 的订阅账号挂到 OpenCode 上！
+不要把 Claude Code / Codex 的订阅账号挂到 OpenCode 上！
+不要把 Claude Code / Codex 的订阅账号挂到 OpenCode 上！
+已经有人因为这样做被封号了。官方的订阅是给官方工具用的，你拿去给第三方工具
+用，人家查到了直接封你没商量。
+以下再详细介绍他们分别是干什么的。
+
+先说说 Open Code 是什么
+
+00:36
+
+是一个直接跑在终端里的AI编程Agent。你不需要打开什么IDE，不需要装
+什么插件，直接在命令行里输入opencode，就可以开始跟AI对话写代码了。
+Open Code
+
+它有几个优点：
+集成：能理解你的代码结构，知道哪个函数在哪里定义的
+多会话支持：可以同时开好几个对话
+开发者友好：终端党的福音，不用离开你熟悉的环境
+LSP
+
+听起来不错对吧？但用过的人都知道，这玩意儿有几个让人抓狂的问题。
+第一，它是单兵作战，没有指挥官。
+
+啥意思呢？就是它只有一个 AI 在那里干活，遇到复杂任务的时候，它没法把任务拆分
+给 " 专业的人 " 去做。你让它写前端，它写前端；你让它写后端，它写后端。但如果你
+说"帮我做一个完整的应用"，它就容易晕。
+这就像一个人既当产品经理又当设计师又当前端又当后端，理论上可以，但效率和质量
+都堪忧。
+第二，工具比较基础。
+它的 LSP 支持是只读的，只能看不能改。比如你想让它帮你重构代码，统一改个变量
+名，它做不到自动化操作，只能一个个手动改。
+第三，大项目容易翻车。
+当代码量大了之后，上下文一多，AI就容易犯迷糊。要么干着干着不动了，要么做一半
+放弃了，要么就是在那里疯狂消耗token但没啥进展。这个问题谁用谁知道。
+这些问题看着小，实际上严重限制了它的能力边界。
+Oh My Open Code
+
+来了
+
+有人看到 Open Code 的这些问题，就搞了一个增强框架叫 Oh My Open Code。
+这东西的口号很狂："This is coding on steroids"——打了激素的编程体验。
+作者说他花了价值 $24,000 的 token 来测试各种 AI 编程工具，最后把所有踩过的坑和
+最佳实践都打包进了这个框架里。而且这玩意儿已经被 Google、Microsoft、Indent 这
+些公司的员工在用了。
+先看几个真实用户的评价：
+
+"
+
+它让我取消了 Cursor 订阅。开源社区正在发生不可思议的事情。" — Arthur Guiot
+
+如果 Claude Code 能在 7 天内完成人类 3 个月的工作， Sisyphus 能在 1 小时内完
+成。它就是一直干到任务完成为止。" — B, 量化研究员
+"
+
+"
+
+一天之内用 Oh My OpenCode 干掉了 8000 个 eslint 警告。" — Jacob Ferrari
+
+"
+
+一夜之间把一个 45000 行的 Tauri 应用转成了 SaaS 网站。" — James Hargis
+
+听起来有点吹，但看完它的设计思路，你会觉得这些评价是有道理的。
+
+：一个不会放弃的 Agent
+
+Sisyphus
+
+Oh My Open Code
+
+的核心是一个叫 Sisyphus（西西弗斯）的 Agent。
+
+为什么叫这个名字？希腊神话里，西西弗斯被罚永远推石头上山，石头滚下来，他再推
+上去，永不停止。
+这个 Agent 也是这个逻辑：它会一直干，直到任务完成。
+你只需要对它说一个魔法词：ultrawork。
+然后它就会进入一种 " 纪律模式 " ，不达目的不罢休。任务失败了？自动重试。遇到报
+错？自动修复。上下文太长？自动压缩。它就像一个永不停止的工人，一直推着石头往
+上走。
+
+专业化的 Agent 团队
+
+Sisyphus
+
+不是一个人在战斗，它会调度一群专业化的子 Agent：
+
+：架构师和代码审查专家，负责策略制定
+Librarian ：图书馆员，专门查文档、找实现案例、分析多个代码仓库
+Frontend Engineer ：前端工程师，专门处理 UI 相关的工作
+Explorer ：探索者，负责代码库分析和理解
+Oracle
+
+这些 Agent 可以在后台并行运行。
+也就是说，当你让它做一个任务的时候，它可以同时派好几个 Agent 去干不同的活儿。
+一个在研究文档，一个在写后端，一个在处理前端，互不干扰。
+这才是真正的"AI 开发团队"，而不是一个人在那里手忙脚乱。
+
+几个硬核功能
+第一，完整的 LSP 重构支持。
+的 LSP 是只读的，只能分析代码结构。Oh My Open Code 加了真正的重构
+工具： rename （重命名）、 code actions （代码操作）。这对于大项目来说是救命的功
+能。
+Open Code
+
+第二，精选的 MCP 工具。
+默认集成了三个很实用的 MCP：
+websearch
+
+：实时网络搜索，用的是 Exa AI
+
+：自动获取最新的官方文档
+grep_app ：在数百万个 GitHub 公开仓库里搜索代码
+context7
+
+这些工具让 Agent 不再是闭门造车，而是能实时获取最新信息。
+第三，智能上下文管理。
+它有一套叫 "preemptive compaction" 的机制，在上下文快要爆的时候提前压缩，而不
+是等到爆了再处理。还有 "aggressive truncation"，在必要时激进地裁剪输出，保证不
+超限。
+
+实际效果怎么样
+整个工作流程是这样的：
+你说 ultrawork，告诉 Sisyphus 你想要什么
+2. Sisyphus 自动分析、创建 TODO 、分配任务
+3. 并行派出多个 Agent 干活（搜索模式、分析模式、编码模式交替进行）
+4. 自动验证、自动修复、自动重构
+5. 直到任务完成才停下来
+1.
+
+全程自动，人类只需要最开始说一句话，中间不用介入。
+有人用它一夜之间把 45000 行代码转成了 SaaS 应用，有人用它一天干掉了 8000 个
+lint 警告。这些不是 Demo ，是真实的生产环境案例。
+
+opencode-antigravity-auth
+
+武器
+
+：免费用顶级模型的秘密
+
+说完了 Oh My Open Code，还得说说另一个神器：opencode-antigravity-auth。
+这是什么？简单说，它让你用 Google 账号免费使用顶级 AI 模型。
+有个工具叫 Antigravity （反重力），是 Google 的 AI IDE 。这个插件做的事情，
+就是让 OpenCode 通过 OAuth 认证接入 Antigravity 的配额系统。
+Google
+
+这意味着什么？
+你可以免费使用这些模型：
+：Anthropic 最强的模型
+Claude Sonnet 4.5 Thinking ：性价比之王
+Claude Opus 4.5 Thinking
+
+Gemini 3 Pro / Flash
+
+：Google 最新的模型
+
+是的，你没看错，免费。用你的 Google 账号登录就行。
+
+这插件有几个骚操作
+第一，双配额系统。
+它同时支持两套配额：Antigravity 配额（Claude、Gemini 3）和 Gemini CLI 配额。相
+当于你有两个弹药库可以用。
+第二，多账号轮换。
+你可以添加多个 Google 账号，一个账号限速了，自动切换到下一个。这对于重度用户
+来说太实用了。
+第三，Extended Thinking 支持。
+支持 Claude 的思考预算配置和 Gemini 3 的思考级别。你可以根据任务复杂度动态调整
+AI 的 " 思考深度 " 。
+
+怎么装
+安装很简单，在 ~/.config/opencode/opencode.json 里加上插件：
+{
+"plugin": ["opencode-antigravity-auth@1.2.8"]
+
+}
+
+然后运行认证：
+opencode auth login
+
+用 Google 账号登录，搞定。
+
+和 Oh My Open Code 配合使用
+这两个插件可以一起用。在 oh-my-opencode.json 里配置一下：
+{
+"google_auth": false,
+"agents": {
+"frontend-ui-ux-engineer": { "model": "google/gemini-3-pro-high" },
+"document-writer": { "model": "google/gemini-3-flash" }
+}
+}
+
+这样你的 AI 开发团队就可以用上免费的顶级模型了。
+
+最后说几句
+回顾一下这三件套的组合：
+1. Open Code
+
+：开源的终端 AI 编程 Agent，自由选择模型
+
+：把单兵作战升级成 AI 团队协作
+3. opencode-antigravity-auth ：免费使用顶级模型
+2. Oh My Open Code
+
+三者组合起来，你就有了一个免费的、开源的、超强的 AI 编程团队。
+这套组合的意义在于：打破了 AI 编程工具的付费墙和生态锁定。
+以前你想用最强的 AI 编程体验，要么订阅 Claude Max（200刀/月），要么用 ChatGPT
+Pro （ 200 刀 / 月）。现在，开源社区给出了另一条路。
+当然，这些工具也有风险。官方 README 里明确写了：使用 Antigravity 配额可能违反
+服务条款，存在账号风险。所以这事儿需要你自己权衡。
+但不管怎样，开源社区正在做的事情让人兴奋：把最先进的 AI 能力，用最低的门槛，
+交到每个开发者手里。
+这才是开源精神。
+相关链接：
+OpenCode: https://opencode.ai/
+oh-my-opencode: https://github.com/code-yeongyu/oh-my-opencode
+opencode-antigravity-auth: https://github.com/NoeFabris/opencodeantigravity-auth
+
+全文完，👇如果觉得有用，欢迎点赞转发关注，把最新的技术变化掰碎了讲给你听。
+
+往期文章：
+Claude Code
+
+订阅费太贵？这个工具让你0成本用上 Claude 和 Gemini
+
+同时开3个AI帮你写代码，一个人这回真能顶一个团队了
+这三个Skill，让你的大模型从"能写代码"变成"编程专家"
+这回，Google 真想通了，NotebookLM 和 Gemini 合体，知识库彻底活了
+Anthropic
+Claude
+
+交底：我们内部是怎么用 AI 的
+
+刚登顶，OpenAI就放出24小时不休息的编程AI，谁才是最强？
+
+Google Antigravity
+Claude Opus 4.5
+
+上手指南：让5个AI同时帮你写代码，还能自己测试
+
+这次的更新，想说点大实话
+
+你大爷永远是你大爷，谷歌放大招：Gemini 3 和 Antigravity，关键还让你免费用
+Claude
+
+的新技能为我省下了北京的一套一室一厅
+
+不会用 Cursor 的程序员，和十年前不会用电脑的人没区别
+编程 · 目录
+上一篇
+
+AI
+
+订阅费太贵？这个工具让你0成
+和 Gemini
+
+Claude Code
+Claude
+
+本用上
+
+下一篇
+都2026年了，你为什么依然觉得AI编程不好
+用？亚马逊工程师怒怼：别怪模型，是你太拉
+
+
