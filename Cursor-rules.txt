@@ -65,20 +65,32 @@
 - 代码示例：为每个技术点提供简洁的代码示例
 - 知识图谱：建立技术概念之间的关系图谱
 - 版本管理：技术思路文档使用版本号和日期管理
-- 双语文档：所有技术思路文档必须是中英文对照
 
 ## 语言要求
 - 始终使用简体中文回答
-- 所有AI生成的文档都必须是中英文对照
 
 ## 文档管理规则（强制要求）
-- 所有AI生成的文档（包括Markdown文档、技术文档、论文分析文档、技术思路文档等）必须放在docs目录下，这是强制性要求，没有例外
-- 论文分析文档：必须放在 docs/papers/ 目录
-- 技术思路文档：必须放在 docs/technical_ideas/ 目录
-- 其他技术文档：必须放在 docs/ 目录
-- 所有AI生成的文档必须包含版本号和日期
-- 文档命名格式：功能名_版本号_日期_AI.md
-- 所有AI生成的文档都必须是中英文对照
+- **重要原则：只在关键情况下创建文档，避免不必要的文档生成**
+- **必须创建文档的情况**（以下情况必须创建文档）：
+  - 技术文档：重要的技术方案、架构设计、API文档等
+  - 计划文档：项目计划、开发路线图、任务分解等
+  - 问题解决文档：多次修改才解决的问题、未解决的问题、复杂问题的解决过程
+  - 论文分析文档：论文阅读和分析（必须放在 docs/papers/ 目录）
+  - 技术思路文档：重要的技术思路整理（必须放在 docs/technical_ideas/ 目录）
+- **可选创建文档的情况**（由用户明确要求时再创建）：
+  - 简单的代码修改说明
+  - 一次就能解决的问题
+  - 常规的代码实现
+  - 其他非关键性内容
+- **文档位置要求**（创建文档时必须遵守）：
+  - 所有AI生成的文档必须放在docs目录下，这是强制性要求，没有例外
+  - 论文分析文档：必须放在 docs/papers/ 目录
+  - 技术思路文档：必须放在 docs/technical_ideas/ 目录
+  - 其他技术文档：必须放在 docs/ 目录
+- **文档命名规范**（创建文档时必须遵守）：
+  - 所有AI生成的文档必须包含版本号和日期
+  - 文档命名格式：功能名_版本号_日期_AI.md
+- **默认行为**：除非满足"必须创建文档的情况"，否则不自动创建文档，等待用户明确要求
 
 ## 工作流程要求
 - 每次代码修改后必须更新记录文件（docs/AI代码修改记录.txt）
@@ -93,6 +105,47 @@
 - 可测试性：提供单元测试和集成测试示例
 - 性能：优化关键路径，使用profiling工具识别瓶颈
 - 文档：为每个函数和类提供docstring
+
+## Skills 配置和使用规则
+- **Skills 仓库位置**：https://github.com/hzm8341/cursor_skill
+- **Skills 配置目录**：`~/.config/opencode/skill/`（全局）或 `.opencode/skill/`（项目级）
+- **配置方法**（按优先级）：
+  1. **使用同步脚本（推荐）**：
+     ```bash
+     # 克隆 skills 仓库
+     git clone https://github.com/hzm8341/cursor_skill.git
+     
+     # 使用 OpenCode 项目的同步脚本
+     cd /path/to/opencode
+     ./scripts/sync-skills.sh sync /path/to/cursor_skill
+     ```
+  2. **手动创建符号链接**：
+     ```bash
+     mkdir -p ~/.config/opencode/skill
+     cd ~/.config/opencode/skill
+     ln -s /path/to/cursor_skill/algorithmic-art algorithmic-art
+     # ... 为其他 skills 创建链接
+     ```
+  3. **复制到标准目录**：
+     ```bash
+     cp -r cursor_skill/* ~/.config/opencode/skill/
+     ```
+- **跨设备同步**：
+  - 使用 Git 克隆仓库到每台设备
+  - 在每台设备上运行同步脚本创建符号链接
+  - 或使用云存储（Dropbox、OneDrive等）同步 skills 目录
+- **验证配置**：
+  ```bash
+  # 检查链接
+  ls -la ~/.config/opencode/skill/
+  
+  # 使用同步脚本验证
+  ./scripts/sync-skills.sh verify
+  
+  # 列出所有 skills
+  ./scripts/sync-skills.sh list
+  ```
+- **Skills 文档**：详细使用指南见 `docs/Cursor_Skills_使用指南_v1.0_20250116_AI.md`
 
 ## 思考步骤
 逐步思考：首先理解任务（例如机器人导航）；其次规划架构（例如RL策略）；第三编写代码；第四建议测试
