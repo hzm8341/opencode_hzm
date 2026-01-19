@@ -180,6 +180,73 @@ paru -S opencode-bin
 curl -fsSL https://opencode.ai/install | bash
 ```
 
+### 方式三：使用 DEB 包安装（Linux）
+
+#### 1. 获取 DEB 包
+
+DEB 包可以从以下位置获取：
+- GitHub Releases
+- 项目构建输出：`packages/opencode/dist/opencode_<version>_<arch>.deb`
+
+#### 2. 安装 DEB 包
+
+```bash
+# 安装 DEB 包
+sudo dpkg -i opencode_1.1.4_amd64.deb
+
+# 如果遇到依赖问题，运行：
+sudo apt-get install -f
+
+# 验证安装
+opencode --version
+```
+
+#### 3. 验证安装
+
+```bash
+# 检查包状态
+dpkg -l | grep opencode
+
+# 查看安装的文件
+dpkg -L opencode
+
+# 测试命令
+opencode --version
+opencode --help
+```
+
+#### 4. 卸载
+
+```bash
+# 卸载 OpenCode
+sudo dpkg -r opencode
+
+# 完全卸载（包括配置文件）
+sudo dpkg -P opencode
+```
+
+#### 5. 测试安装脚本
+
+项目提供了自动化测试脚本：
+
+```bash
+cd packages/opencode
+./test-deb-install.sh
+```
+
+该脚本会：
+- 检查 DEB 包是否存在
+- 显示包信息
+- 询问是否安装
+- 自动安装并测试
+
+#### DEB 包信息
+
+- **安装位置**: `/usr/bin/opencode`
+- **文档位置**: `/usr/share/doc/opencode/`
+- **依赖**: `libc6 (>= 2.17)`
+- **架构支持**: amd64, arm64
+
 ### 安装目录配置
 
 安装脚本按以下优先级选择安装路径：
@@ -576,6 +643,76 @@ bun run --cwd packages/desktop dev
 ./packages/opencode/script/build.ts
 ```
 
+#### 打包为 DEB/DMG
+
+##### Linux - 打包为 DEB
+
+```bash
+cd packages/opencode
+
+# 1. 先构建可执行文件
+bun run script/build.ts --single
+
+# 2. 打包为 DEB（自动检测架构）
+bun run script/package.ts --format deb
+
+# 或指定架构
+bun run script/package.ts --format deb --arch amd64
+bun run script/package.ts --format deb --arch arm64
+
+# 或使用快捷命令
+bun run package:deb
+```
+
+**输出位置**: `packages/opencode/dist/opencode_<version>_<arch>.deb`
+
+**安装测试**:
+```bash
+# 安装
+sudo dpkg -i dist/opencode_1.1.4_amd64.deb
+
+# 测试
+opencode --version
+
+# 卸载
+sudo dpkg -r opencode
+```
+
+##### macOS - 打包为 DMG
+
+```bash
+cd packages/opencode
+
+# 1. 先构建可执行文件
+bun run script/build.ts --single
+
+# 2. 打包为 DMG（自动检测架构）
+bun run script/package.ts --format dmg
+
+# 或指定架构
+bun run script/package.ts --format dmg --arch arm64
+bun run script/package.ts --format dmg --arch x64
+
+# 或使用快捷命令
+bun run package:dmg
+```
+
+**输出位置**: `packages/opencode/dist/opencode_<version>_<arch>.dmg`
+
+**安装测试**:
+```bash
+# 打开 DMG
+open dist/opencode_1.1.4_arm64.dmg
+
+# 复制到系统路径
+sudo cp /Volumes/OpenCode/opencode /usr/local/bin/
+
+# 测试
+opencode --version
+```
+
+**详细文档**: 参考 `docs/打包使用指南_v1.0_20260126_AI.md`
+
 #### 构建桌面应用
 
 ```bash
@@ -889,6 +1026,40 @@ bun dev run --agent build "实现某个功能"
 3. 手动下载 Bun 二进制文件
 4. 检查系统权限
 
+#### Q: DEB 包安装失败怎么办？
+
+**A**: 常见问题和解决方案：
+
+**A**: Common issues and solutions:
+
+1. **依赖问题**
+   ```bash
+   # 如果遇到依赖错误
+   sudo apt-get install -f
+   # 然后重新安装
+   sudo dpkg -i opencode_*.deb
+   ```
+
+2. **架构不匹配**
+   ```bash
+   # 检查系统架构
+   uname -m
+   # 确保使用匹配的 DEB 包（amd64 或 arm64）
+   ```
+
+3. **权限问题**
+   ```bash
+   # 确保使用 sudo 安装
+   sudo dpkg -i opencode_*.deb
+   ```
+
+4. **包损坏**
+   ```bash
+   # 验证包完整性
+   dpkg-deb -I opencode_*.deb
+   # 重新下载或重新打包
+   ```
+
 #### Q: 依赖安装失败怎么办？
 
 **A**: 尝试以下方法：
@@ -1124,6 +1295,13 @@ bun dev run --agent plan "任务2" /path/to/project2
 
 
 ## 更新日志
+
+### v1.6 (2026-01-26)
+
+- 添加 DEB 包安装方式（方式三）
+- 添加 DEB/DMG 打包说明
+- 添加 DEB 安装测试脚本说明
+- 添加 DEB 安装常见问题解答
 
 ### v1.5 (2026-01-16)
 

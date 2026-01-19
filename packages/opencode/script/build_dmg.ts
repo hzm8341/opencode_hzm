@@ -1,6 +1,6 @@
 #!/usr/bin/env bun
-// DEB 打包脚本（向后兼容包装器）
-// 用途: 将构建好的可执行文件打包为 DEB 格式
+// DMG 打包脚本（向后兼容包装器）
+// 用途: 将构建好的可执行文件打包为 DMG 格式
 // 注意: 此脚本现在调用统一的 package.ts 脚本
 
 import { $ } from "bun"
@@ -19,7 +19,7 @@ const archArg = process.argv.includes("--arch")
   : null
 
 // 调用统一的打包脚本
-const args = ["--format", "deb"]
+const args = ["--format", "dmg"]
 if (archArg) {
   args.push("--arch", archArg)
 }
