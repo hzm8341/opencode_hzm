@@ -24,3 +24,6 @@ target
 # Local dev files
 opencode-dev
 logs/
+
+# Build artifacts
+**/deb_build/
