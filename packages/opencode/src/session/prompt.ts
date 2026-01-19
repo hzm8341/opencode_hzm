@@ -1634,4 +1634,47 @@ export namespace SessionPrompt {
         draft.title = title
       })
   }
+
+  /**
+   * 带 Manus 模式的 prompt（v5.0 新增）
+   * 不创建独立执行引擎，而是扩展现有 prompt 系统
+   */
+  export async function promptWithManus(input: {
+    sessionID: string
+    parts: PromptInput["parts"]
+    directory?: string
+    useManus?: boolean
+    planningFilesDir?: string
+    model?: PromptInput["model"]
+    agent?: PromptInput["agent"]
+    noReply?: PromptInput["noReply"]
+  }): Promise<MessageV2.Assistant> {
+    // 如果使用 Manus 模式，初始化 Hooks
+    if (input.useManus) {
+      const { ManusHooksAdapter } = await import('../unified/manus-hooks-adapter')
+      const adapter = new ManusHooksAdapter(
+        input.planningFilesDir || input.directory || process.cwd()
+      )
+      adapter.initialize()
+      
+      // 监听文件更新事件，清除缓存
+      // TODO: 实现文件监听机制
+      // 可以使用 chokidar 或 @parcel/watcher
+    }
+    
+    // 使用现有的 prompt 系统
+    // 注意：directory 不是 PromptInput 的一部分，但可以通过 Instance 设置
+    if (input.directory) {
+      // TODO: 设置工作目录（如果需要）
+      // Instance.directory = input.directory
+    }
+    
+    return await prompt({
+      sessionID: input.sessionID,
+      parts: input.parts,
+      model: input.model,
+      agent: input.agent,
+      noReply: input.noReply,
+    })
+  }
 }
