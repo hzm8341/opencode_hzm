@@ -62,13 +62,13 @@ For more details, see [Windows Setup Guide](WINDOWS_SETUP_README.md) or [Windows
 
 ### Desktop App (BETA)
 
-OpenCode is also available as a desktop application. Download directly from the [releases page](https://github.com/anomalyco/opencode/releases) or [opencode.ai/download](https://opencode.ai/download).
+OpenCode is also available as a desktop application. Download directly from the [releases page](https://github.com/hzm8341/opencode_hzm/releases/tag/v0.1) or [opencode.ai/download](https://opencode.ai/download).
 
 | Platform              | Download                              |
 | --------------------- | ------------------------------------- |
 | macOS (Apple Silicon) | `opencode-desktop-darwin-aarch64.dmg` |
 | macOS (Intel)         | `opencode-desktop-darwin-x64.dmg`     |
-| Windows               | `opencode-desktop-windows-x64.exe`    |
+| Windows               | [OpenCode-Desktop-Windows.zip](https://github.com/hzm8341/opencode_hzm/releases/tag/v0.1) - Windows Desktop应用首次发布 |
 | Linux                 | `.deb`, `.rpm`, or AppImage           |
 
 ```bash
