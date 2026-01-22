@@ -438,7 +438,7 @@ const OhMyOpenCodePlugin: Plugin = async (ctx) => {
       await interactiveBashSession?.event(input);
       await ralphLoop?.event(input);
       await sisyphusOrchestrator?.handler(input);
-      await unifiedFlow?.handler(input);
+      await unifiedFlow?.handler(input.event);
 
       const { event } = input;
       const props = event.properties as Record<string, unknown> | undefined;

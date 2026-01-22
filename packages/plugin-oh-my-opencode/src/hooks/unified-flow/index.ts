@@ -103,8 +103,7 @@ export function createUnifiedFlowHook(
   const stateManager = createStateManager(ctx.directory || process.cwd())
   
   return {
-    handler: async (input: { event: { type: string; properties?: unknown } }) => {
-      const { event } = input
+    handler: async (event: { type: string; properties?: unknown }) => {
       if (!enabled) {
         return
       }
