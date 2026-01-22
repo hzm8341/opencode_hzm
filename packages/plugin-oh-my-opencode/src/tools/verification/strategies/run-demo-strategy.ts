@@ -98,7 +98,7 @@ export class RunDemoVerificationStrategy implements VerificationStrategy {
 
     // Perform health check
     const healthCheck = await httpHealthCheck(url, 10000)
-    evidence.push({
+    evidence?.push({
       type: "health_check",
       data: JSON.stringify(healthCheck),
     })
@@ -116,7 +116,7 @@ export class RunDemoVerificationStrategy implements VerificationStrategy {
 
         // Retry health check
         const retryCheck = await httpHealthCheck(url, 10000)
-        evidence.push({
+        evidence?.push({
           type: "health_check_retry",
           data: JSON.stringify(retryCheck),
         })

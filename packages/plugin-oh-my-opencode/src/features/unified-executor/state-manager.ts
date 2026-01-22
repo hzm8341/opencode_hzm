@@ -6,7 +6,8 @@
 
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "fs"
 import { join } from "path"
-import type { ExecutionState, ExecutionPhase } from "./types"
+import type { ExecutionState } from "./types"
+import { ExecutionPhase } from "./types"
 
 const EXECUTION_STATE_DIR = ".sisyphus/execution-state"
 const STATE_FILE_EXT = ".json"

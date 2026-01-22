@@ -4,7 +4,7 @@
  * Detects unified flow requests and injects phase-specific prompts.
  */
 
-import type { PluginInput } from "../../index"
+import type { PluginInput } from "@opencode-ai/plugin"
 import { getPhasePrompt } from "../../agents/unified-flow-prompts"
 import { ExecutionPhase, createStateManager } from "../../features/unified-executor"
 import type { ExecutionState, SuccessCriteria, TaskType } from "../../features/unified-executor/types"
@@ -103,7 +103,7 @@ export function createUnifiedFlowHook(
   const stateManager = createStateManager(ctx.directory || process.cwd())
   
   return {
-    handler: async ({ event }: { type: string; properties?: unknown }) => {
+    handler: async ({ event }: { event: { type: string; properties?: unknown } }) => {
       if (!enabled) {
         return
       }

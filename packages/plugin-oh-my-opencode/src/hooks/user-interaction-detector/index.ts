@@ -5,7 +5,7 @@
  * and triggers the user_interaction tool.
  */
 
-import type { PluginInput } from "../../index"
+import type { PluginInput } from "@opencode-ai/plugin"
 import { log } from "../../shared/logger"
 
 /**

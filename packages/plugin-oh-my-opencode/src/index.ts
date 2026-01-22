@@ -70,6 +70,8 @@ import {
   interactive_bash,
   startTmuxCheck,
   lspManager,
+  createVerificationTool,
+  createUserInteractionTool,
 } from "./tools";
 import { BackgroundManager } from "./features/background-agent";
 import { SkillMcpManager } from "./features/skill-mcp-manager";

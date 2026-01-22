@@ -6,7 +6,8 @@
 
 import { tool, type PluginInput, type ToolDefinition } from "@opencode-ai/plugin"
 import { executeVerification } from "./engine"
-import type { VerificationContext } from "../../features/unified-executor/types"
+import type { VerificationContext, SuccessCriteria } from "../../features/unified-executor/types"
+import { TaskType, VerificationMethod } from "../../features/unified-executor/types"
 import { log } from "../../shared/logger"
 
 const VERIFICATION_TOOL_DESCRIPTION = `Verify task completion using end-to-end verification strategies.
@@ -65,10 +66,20 @@ export function createVerificationTool(ctx: PluginInput): ToolDefinition {
 
       try {
         // Build verification context
+        const successCriteria: SuccessCriteria = {
+          type: args.successCriteria.type as TaskType,
+          description: args.successCriteria.description,
+          verification: {
+            method: args.successCriteria.verification.method as VerificationMethod,
+            target: args.successCriteria.verification.target,
+            expected: args.successCriteria.verification.expected,
+            timeout: args.successCriteria.verification.timeout,
+          },
+        }
         const context: VerificationContext = {
           projectPath: toolCtx.directory || ctx.directory,
           taskDescription: args.taskDescription,
-          successCriteria: args.successCriteria,
+          successCriteria,
           sessionId: toolCtx.sessionID,
         }
 

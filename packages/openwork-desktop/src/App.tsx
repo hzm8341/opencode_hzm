@@ -1798,7 +1798,7 @@ export default function App() {
     pickWorkspaceFolder: workspaceStore.pickWorkspaceFolder,
     sessions: activeSessions().map((s) => ({
       id: s.id,
-      slug: s.slug,
+      slug: s.id.slice(0, 8),
       title: s.title,
       time: s.time,
       directory: s.directory,
@@ -1926,7 +1926,7 @@ export default function App() {
                 sessions={activeSessions().map((session) => ({
                   id: session.id,
                   title: session.title,
-                  slug: session.slug,
+                  slug: session.id.slice(0, 8),
                 }))}
                 selectSession={isDemoMode() ? selectDemoSession : selectSession}
                 messages={activeMessages()}
