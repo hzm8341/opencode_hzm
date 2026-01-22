@@ -163,7 +163,7 @@ export class SessionMapper {
 
     // Remove from storage
     try {
-      await Storage.delete(["claude-sdk-mapping", sessionID])
+      await Storage.remove(["claude-sdk-mapping", sessionID])
     } catch (error) {
       log.error("Failed to delete session mapping from storage", {
         sessionID,

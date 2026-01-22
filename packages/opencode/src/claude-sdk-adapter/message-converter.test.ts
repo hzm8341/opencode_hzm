@@ -240,6 +240,7 @@ describe("MessageConverter", () => {
             state: {
               status: "pending",
               input: { command: "invalid-command" },
+              raw: "invalid-command",
             },
           },
           messageID: "msg-1",
@@ -300,6 +301,7 @@ describe("MessageConverter", () => {
             state: {
               status: "pending",
               input: { command: "command1" },
+              raw: "command1",
             },
           },
           messageID: "msg-1",
@@ -316,6 +318,7 @@ describe("MessageConverter", () => {
             state: {
               status: "pending",
               input: { path: "file.txt" },
+              raw: JSON.stringify({ path: "file.txt" }),
             },
           },
           messageID: "msg-1",

@@ -107,10 +107,10 @@ export class PermissionInterceptor {
         session = await Session.get(sessionID)
         
         // Try to get agent from last user message
-        const messages = await MessageV2.list({ sessionID, limit: 10 })
-        const lastUserMessage = messages
-          .filter((m) => m.info.role === "user")
-          .sort((a, b) => a.info.id.localeCompare(b.info.id))
+        const allMessages = await Session.messages({ sessionID })
+        const lastUserMessage = allMessages
+          .filter((m: MessageV2.WithParts) => m.info.role === "user")
+          .sort((a: MessageV2.WithParts, b: MessageV2.WithParts) => a.info.id.localeCompare(b.info.id))
           .at(-1)
 
         const agentName = lastUserMessage?.info.agent ?? (await Agent.defaultAgent())
@@ -171,6 +171,7 @@ export class PermissionInterceptor {
             permission: permissionName,
             patterns: [pattern],
             sessionID,
+            always: [],
             metadata: {
               tool: toolName,
               input: input as Record<string, unknown>,

@@ -14,7 +14,7 @@ describe('E2E Tests', () => {
     testDir = join(tmpdir(), `opencode-e2e-test-${Date.now()}`)
     await mkdir(testDir, { recursive: true })
     sessionID = Identifier.ascending('session')
-    await Session.create(sessionID)
+    await Session.create({})
   })
   
   afterEach(async () => {

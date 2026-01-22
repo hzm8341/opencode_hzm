@@ -39,7 +39,7 @@ export const UnifiedCommand = cmd({
   handler: async (args) => {
     await bootstrap(args.dir, async () => {
       // 创建会话
-      const session = await Session.create()
+      const session = await Session.create({})
       const sessionID = session.id
       
       // 调用共享模块
