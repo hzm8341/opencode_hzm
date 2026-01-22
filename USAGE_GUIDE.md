@@ -3369,6 +3369,120 @@ Skills 可以通过以下位置自动发现：
    - `~/.config/opencode/skill/<name>/SKILL.md`
    - `~/.claude/skills/<name>/SKILL.md`
 
+**优先级说明**：项目级别的 Skills 优先级高于全局级别。如果同一个 Skill 在项目级和全局级都存在，将优先使用项目级的版本。
+
+### 全局 Skills 配置
+
+#### 配置方法
+
+要将项目中的 Skills 配置为全局可用（在所有项目中都可以使用），有以下几种方法：
+
+**方法1：创建符号链接（推荐）**
+
+```bash
+# 1. 创建全局 skill 目录
+mkdir -p ~/.config/opencode/skill
+
+# 2. 创建符号链接到项目中的 skill
+cd ~/.config/opencode/skill
+ln -sf /path/to/opencode_hzm/skills/<skill-name> <skill-name>
+
+# 例如：配置 pdf skill 为全局可用
+ln -sf /Users/minghu/Downloads/opencode_hzm/skills/pdf pdf
+
+# 3. 验证配置
+test -f ~/.config/opencode/skill/<skill-name>/SKILL.md && echo "✅ Skill 配置成功" || echo "❌ Skill 配置失败"
+```
+
+**方法2：使用同步脚本（如果可用）**
+
+```bash
+# 如果有同步脚本，可以使用
+cd /path/to/opencode_hzm
+./scripts/sync-skills.sh sync /path/to/skills/repository
+```
+
+**方法3：复制到全局目录**
+
+```bash
+# 复制 skill 到全局目录（不推荐，因为更新不会自动同步）
+cp -r /path/to/opencode_hzm/skills/<skill-name> ~/.config/opencode/skill/
+```
+
+#### 已配置的全局 Skill
+
+当前已配置为全局可用的 Skill：
+
+- **planning-with-files** - Manus 风格的文件规划模式
+  - 路径：`~/.config/opencode/skill/planning-with-files` → `/Users/minghu/Downloads/opencode_hzm/packages/skill-planning`
+  - 验证：`ls -la ~/.config/opencode/skill/planning-with-files`
+  - 使用：`bun dev run "使用 planning-with-files skill 规划复杂任务"`
+
+#### 配置项目中的 Skills 为全局可用
+
+项目 `skills/` 目录下的所有 Skills 都可以配置为全局可用：
+
+**可用的项目级 Skills：**
+
+- `pdf` - PDF 文档处理
+- `docx` - Word 文档处理
+- `pptx` - PowerPoint 演示文稿处理
+- `xlsx` - Excel 电子表格处理
+- `frontend-design` - 前端设计
+- `canvas-design` - 画布设计
+- `algorithmic-art` - 算法艺术
+- `theme-factory` - 主题工厂
+- `brand-guidelines` - 品牌指南
+- `web-artifacts-builder` - Web 工件构建器
+- `webapp-testing` - Web 应用测试
+- `mcp-builder` - MCP 服务器构建器
+- `skill-creator` - Skill 创建工具
+- `internal-comms` - 内部通信
+- `doc-coauthoring` - 文档协作
+- `slack-gif-creator` - Slack GIF 创建器
+
+**批量配置示例：**
+
+```bash
+# 创建全局目录
+mkdir -p ~/.config/opencode/skill
+
+# 批量创建符号链接
+cd ~/.config/opencode/skill
+for skill in pdf docx pptx xlsx frontend-design canvas-design algorithmic-art theme-factory brand-guidelines web-artifacts-builder webapp-testing mcp-builder skill-creator internal-comms doc-coauthoring slack-gif-creator; do
+  ln -sf /Users/minghu/Downloads/opencode_hzm/skills/$skill $skill
+done
+
+# 验证所有配置
+for skill in pdf docx pptx xlsx frontend-design canvas-design algorithmic-art theme-factory brand-guidelines web-artifacts-builder webapp-testing mcp-builder skill-creator internal-comms doc-coauthoring slack-gif-creator; do
+  test -f ~/.config/opencode/skill/$skill/SKILL.md && echo "✅ $skill" || echo "❌ $skill"
+done
+```
+
+#### 验证全局配置
+
+```bash
+# 检查所有全局配置的 skills
+ls -la ~/.config/opencode/skill/
+
+# 验证特定 skill
+test -f ~/.config/opencode/skill/<skill-name>/SKILL.md && echo "✅ 已配置" || echo "❌ 未配置"
+
+# 查看符号链接指向
+readlink ~/.config/opencode/skill/<skill-name>
+```
+
+#### 使用全局 Skills
+
+配置为全局可用的 Skills 可以在任何项目中使用：
+
+```bash
+# 在任何项目中都可以使用全局 skill
+cd /path/to/any/project
+bun dev run "使用 pdf skill 提取文档内容"
+bun dev run "使用 frontend-design skill 创建响应式组件"
+```
+
 ### 可用 Skills 列表
 
 #### 文档处理类
