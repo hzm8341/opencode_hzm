@@ -96,7 +96,14 @@ Learn more about [agents](https://opencode.ai/docs/agents).
 
 **⚠️ Planning First Principle**
 
-Before starting any new task, **always create a detailed plan** using the `plan` agent, then implement it step by step with the `build` agent. This ensures better code quality, reduces rework, and facilitates progress tracking.
+**Before starting ANY new task, you MUST use the `plan` agent to create a detailed plan and save it as documentation, then implement it step by step with the `build` agent. This is a mandatory requirement, not an option.**
+
+**Why?**
+
+- ✅ Improves code quality and maintainability
+- ✅ Reduces rework and errors
+- ✅ Facilitates progress tracking and problem resolution
+- ✅ Creates knowledge base and enables team collaboration
 
 ```bash
 # Step 1: Create a plan
@@ -108,19 +115,61 @@ bun dev run --agent build --model opencode/grok-code \
   "Implement according to docs/task_plan_v1.0_date_AI.md"
 ```
 
+**Complete Example:**
+
+```bash
+# === Phase 1: Planning
+# Use plan agent + text-processing skill to create plan
+bun dev run --agent plan --model opencode/gpt-5-nano \
+  "Create detailed plan: Encapsulate OCS2 MPC algorithm into ROS2 node.\
+  Plan must include:\
+  1. Code structure analysis\
+  2. ROS2 node design\
+  3. Interface definition\
+  4. Implementation steps (staged)\
+  5. Testing plan\
+  6. Risk assessment\
+  Save to docs/ocs2_mpc_ros2_node_plan_v1.0_$(date +%Y%m%d)_AI.md with bilingual format."
+
+# === Phase 2: Plan Review
+# Review the generated plan document and confirm feasibility
+cat docs/ocs2_mpc_ros2_node_plan_v1.0_*.md
+
+# === Phase 3: Implementation
+# Implement based on plan document using build agent + code-generation skill
+bun dev run --agent build --model opencode/grok-code \
+  "Implement Phase B (ROS2 package and interface prototype) according to plan document docs/ocs2_mpc_ros2_node_plan_v1.0_date_AI.md.\
+  Use code-generation skill to guide code implementation."
+
+# === Phase 4: Compilation & Verification
+# If compilation errors occur, let OpenCode automatically fix them
+bun dev run --agent build --model opencode/grok-code \
+  "Compile /media/hzm/Data/github/ocs2/ocs2_mpc_ros2_node package,\
+  and automatically fix all compilation errors."
+
+# === Phase 5: Documentation Update
+# Update implementation status documentation
+bun dev run --agent plan --model opencode/gpt-5-nano \
+  "Update docs/ocs2_mpc_ros2_node_implementation_status_v1.0_date_AI.md,\
+  record completed work, problems encountered and solutions."
+```
+
 For detailed usage instructions, see [USAGE_GUIDE.md](./USAGE_GUIDE.md).
 
 ### Advanced Features
 
 #### Oh My OpenCode Plugin
 
-Transform your AI agent into a full development team with specialized agents, ultrawork mode, and parallel task execution.
+Transform your AI agent into a full development team with specialized agents, ultrawork mode, parallel task execution, rules injection system, and unified agent execution flow.
 
 **Key Features:**
+
 - 🤖 **Specialized Agent Team** - Oracle, Librarian, Explore, Frontend Engineer, and more
 - 🔄 **Sisyphus Agent** - Never-give-up mechanism with automatic retry and error fixing
 - 🪄 **Ultrawork Mode** - Handle complex tasks with automatic task decomposition and parallel execution
 - 🛠️ **LSP/AST Tools** - Advanced code analysis capabilities
+- 📝 **Rules Injection System** - Define and enforce unified behavior rules for AI Agents across all projects
+- 🔄 **Unified Agent Execution Flow** - Automatic 6-step execution flow from task parsing to delivery
 
 ```bash
 # Install
@@ -132,13 +181,153 @@ opencode run "ultrawork: Refactor the entire TypeScript codebase"
 # Use specialized agents
 opencode run "@oracle Analyze the project architecture"
 opencode run "@librarian Find React Hooks best practices"
+
+# Use unified execution flow (automatic task completion)
+bun dev run "Help me run the current project demo"
+opencode run "unified-flow: Run demo"
 ```
+
+##### Rules Injection System
+
+A powerful enhancement that allows you to define and enforce consistent behavior rules for AI Agents across all your projects.
+
+**Key Features:**
+
+- 📝 **Rule File Management** - Support for `.mdc` and `.md` rule files with frontmatter configuration
+- 🗂️ **Multi-level Configuration** - Project-level (`.claude/rules/`) and user-level (`~/.claude/rules/`) rules
+- 🎯 **Intelligent Matching** - Rule matching based on `globs` patterns with `alwaysApply: true` for universal rules
+- ⚙️ **Automatic Injection** - Rules automatically injected into AI Agent context via `rules-injector` hook
+- 🔄 **Real-time Application** - Rule changes take effect immediately without restarting the Agent
+- 📋 **Comprehensive Coverage** - Support for code style, file naming, documentation, workflow, and domain-specific rules
+
+```bash
+# Create rules directory
+mkdir -p .claude/rules
+
+# Example rule file: python-rules.mdc
+cat > .claude/rules/python-rules.mdc << 'EOF'
+---
+description: "Python code rules"
+globs: ["*.py"]
+---
+
+## Python Code Rules
+
+- Follow PEP 8 guidelines
+- Use type annotations (Type Hints)
+- Avoid type-ignoring statements like `as any`
+- Prefer PyTorch for deep learning implementations
+EOF
+
+# Verify rules are working
+bun dev run "Create a simple Python function to calculate fibonacci sequence"
+```
+
+##### Unified Agent Execution Flow
+
+A core feature that automatically triggers a complete 6-step execution flow with a single sentence input, from task parsing to result delivery.
+
+**6-Step Execution Flow:**
+
+1. **Phase 1: Task Parsing** - Understand core requirements and clarify success criteria
+2. **Phase 2: Intelligent Decomposition** - Break down into executable steps and determine resource needs
+3. **Phase 3: Parallel Execution** - Multi-threaded collection/processing with real-time progress tracking
+4. **Phase 4: Comprehensive Building** - Information fusion and logical construction
+5. **Phase 5: Quality Assurance** - Self-inspection and end-to-end verification
+6. **Phase 6: Result Delivery** - Format as needed and provide execution summary
+
+**Automatic Triggers:**
+
+```bash
+# Examples of automatic unified flow triggers
+bun dev run "Help me run the current project demo"
+bun dev run "Automatically complete user login functionality"
+bun dev run "Help me run demo"
+```
+
+**Key Features:**
+
+- 🎯 **Automatic Task Recognition** - Automatically identifies task types and extracts success criteria
+- 📋 **Smart Decomposition** - Creates detailed plans and reviews automatically
+- ⚡ **Parallel Execution** - Multi-threaded processing with real-time progress tracking
+- 🔨 **Comprehensive Building** - Information integration and logical construction
+- ✅ **Quality Assurance** - Self-inspection with end-to-end verification
+- 📦 **Result Delivery** - Deliverables formatted as needed with execution summaries
 
 Learn more in [USAGE_GUIDE.md](./USAGE_GUIDE.md#oh-my-opencode-插件使用指南).
 
+#### Rules Injection System
+
+A powerful enhancement to the Oh My OpenCode plugin that allows you to define and enforce consistent behavior rules for AI Agents across all your projects. Ensure code quality, maintain naming conventions, and standardize workflows with automated rule enforcement.
+
+**Key Features:**
+
+- 📝 **Rule File Management**: Support for `.mdc` and `.md` rule files with frontmatter configuration
+- 🗂️ **Multi-level Configuration**: Project-level (`.claude/rules/`) and user-level (`~/.claude/rules/`) rules
+- 🎯 **Intelligent Matching**: Rule matching based on `globs` patterns with `alwaysApply: true` for universal rules
+- ⚙️ **Automatic Injection**: Rules are automatically injected into AI Agent context via the `rules-injector` hook
+- 🔄 **Real-time Application**: Rule changes take effect immediately without restarting the Agent
+- 📋 **Comprehensive Coverage**: Support for code style, file naming, documentation, workflow, and domain-specific rules
+
+```bash
+# Create rules directory
+mkdir -p .claude/rules
+
+# Example rule file: python-rules.mdc
+cat > .claude/rules/python-rules.mdc << 'EOF'
+---
+description: "Python code rules"
+globs: ["*.py"]
+---
+
+## Python Code Rules
+
+- Follow PEP 8 guidelines
+- Use type annotations (Type Hints)
+- Avoid type-ignoring statements like `as any`
+- Prefer PyTorch for deep learning implementations
+EOF
+
+# Verify rules are working
+bun dev run "Create a simple Python function to calculate fibonacci sequence"
+```
+
+**Rule File Structure:**
+
+- Frontmatter with `description`, `globs`, and `alwaysApply` fields
+- Markdown content with clear, actionable rules
+- Support for multiple rule files organized by domain or technology
+
+**Quick Start:**
+
+1. Create `.claude/rules/` directory in your project root
+2. Add rule files (e.g., `python-rules.mdc`, `file-naming-rules.mdc`)
+3. Ensure `rules-injector` hook is enabled in `oh-my-opencode.json`
+4. Use OpenCode normally - rules will be automatically applied
+
+**Example Rule Categories:**
+
+- **Code Style**: Language-specific conventions and best practices
+- **File Naming**: Consistent naming with AI-generated file identification
+- **Documentation**: When and how to create documentation
+- **Workflow**: Standard procedures for code modifications and versioning
+- **Domain-specific**: Rules for AI/ML, robotics, web development, etc.
+
+Learn more in [USAGE_GUIDE.md](./USAGE_GUIDE.md#规则注入系统使用指南).
+
 #### Claude SDK Adapter
 
-A compatibility layer that allows using Claude Agent SDK interfaces with OpenCode's agent system. Fully independent, using only OpenCode's internal APIs.
+A compatibility layer that allows using Claude Agent SDK interfaces with OpenCode's agent system. Fully independent implementation using only OpenCode's internal APIs - no dependency on Claude Code executable.
+
+**Key Features:**
+
+- 🎯 **Full Compatibility** - Use Claude Agent SDK interface seamlessly with OpenCode
+- 🔄 **Session Management** - Automatic session creation and resume capability
+- 🛡️ **Permission Control** - Customizable tool usage permissions via `canUseTool` callback
+- ⚡ **Real-time Streaming** - Asynchronous message streaming with full TypeScript support
+- 🏗️ **Architecture Independence** - Completely independent of Claude Code, can be replaced with any OpenCode API-compatible backend
+
+**Basic Usage:**
 
 ```typescript
 import { query } from "@/claude-sdk-adapter"
@@ -149,34 +338,128 @@ await bootstrap("/path/to/project", async () => {
     prompt: "Organize files in the current directory",
     options: { cwd: "/path/to/project" },
   })
-  
+
   for await (const message of q) {
-    console.log(message)
+    if (message.type === "text") {
+      console.log(message.text)
+    } else if (message.type === "tool-call") {
+      console.log(`Tool call: ${message.toolName}`)
+    }
   }
 })
+```
+
+**Advanced Usage:**
+
+```typescript
+// Session resume
+const q = query({
+  prompt: "Continue with previous work",
+  options: {
+    resume: "ses_previous_session_id",
+    cwd: "/path/to/project"
+  }
+})
+
+// Custom permissions
+const q = query({
+  prompt: "Edit README file",
+  options: {
+    canUseTool: async (toolName, input, { signal }) => {
+      if (toolName === "edit" || toolName === "write") {
+        return { behavior: "ask" } // "allow" / "deny"
+      }
+      return { behavior: "allow", updatedInput: input }
+    }
+  }
+})
+
+// Cancellation support
+const abortController = new AbortController()
+setTimeout(() => abortController.abort(), 5000)
+
+const q = query({
+  prompt: "Long running task",
+  options: { abortController }
+})
+```
+
+**Quick Examples:**
+
+```bash
+# Test usage (organize Downloads folder)
+cd /media/hzm/Data/github/opencode/packages/opencode
+bun run src/claude-sdk-adapter/test-usage.ts
+
+# CLI example
+cd /media/hzm/Data/github/opencode/packages/opencode
+bun run src/claude-sdk-adapter/cli-example.ts \
+  "Organize files in current directory" \
+  --cwd /home/hzm/Downloads
+
+# Resume session
+bun run src/claude-sdk-adapter/cli-example.ts \
+  "Continue" --resume ses_xxxxx --cwd /path/to/project
 ```
 
 Learn more in [USAGE_GUIDE.md](./USAGE_GUIDE.md#claude-sdk-adapter-使用指南).
 
 #### Skills System
 
-Extend AI Agent capabilities with modular, self-contained skill packages for specialized domains.
+Extend AI Agent capabilities with modular, self-contained skill packages for specialized domains. Skills are automatically discovered and loaded when needed for specific tasks.
 
 **Available Skills:**
-- 📄 **Document Processing**: PDF, DOCX, PPTX, XLSX
-- 🎨 **Design & Creation**: Frontend Design, Canvas Design, Algorithmic Art, Theme Factory
-- 🌐 **Web Development**: Web Artifacts Builder, Webapp Testing
-- 🛠️ **Tools & Integration**: MCP Builder, Skill Creator
-- 💬 **Communication**: Internal Comms, Doc Coauthoring
 
-Skills are automatically discovered and loaded when needed. You can also explicitly reference them:
+##### Document Processing
+
+- **PDF Skill** (`pdf`) - PDF text/table extraction, merging, splitting, creation, editing, metadata extraction
+- **DOCX Skill** (`docx`) - Word document creation/editing, track changes, format preservation, text extraction
+- **PPTX Skill** (`pptx`) - PowerPoint presentation creation, slide editing, template usage, layout management
+- **XLSX Skill** (`xlsx`) - Excel spreadsheet creation/editing, formulas, data analysis, visualization, formatting
+
+##### Design & Creation
+
+- **Frontend Design Skill** (`frontend-design`) - High-quality frontend UI creation, avoiding generic AI aesthetics, production-ready code
+- **Canvas Design Skill** (`canvas-design`) - Visual artwork creation, design philosophy, PDF/PNG output, original visual design
+- **Algorithmic Art Skill** (`algorithmic-art`) - p5.js algorithmic art, seeded randomness, interactive generation
+- **Theme Factory Skill** (`theme-factory`) - Apply professional themes to artifacts, 10 preset themes, color/font pairing, custom theme creation
+
+##### Web Development
+
+- **Web Artifacts Builder Skill** (`web-artifacts-builder`) - Complex multi-component HTML artifacts, React + TypeScript + Tailwind CSS, shadcn/ui components, single-file HTML packaging
+- **Webapp Testing Skill** (`webapp-testing`) - Playwright testing for local web apps, frontend functionality verification, UI behavior debugging, browser screenshot capture
+
+##### Tools & Integration
+
+- **MCP Builder Skill** (`mcp-builder`) - Create high-quality MCP servers, Python and Node.js, tool design and implementation
+- **Skill Creator Skill** (`skill-creator`) - Create effective skills guides, skill creation workflows, best practices, skill packaging
+
+##### Communication & Collaboration
+
+- **Internal Comms Skill** (`internal-comms`) - Writing internal communications, 3P updates (progress/plans/problems), company communications and FAQs
+- **Doc Coauthoring Skill** (`doc-coauthoring`) - Structured document collaboration workflow, context collection, refinement and structuring, reader testing
+
+**Skills Discovery:**
+
+Skills are automatically discovered from:
+
+1. **Project-level**: `.opencode/skill/<name>/SKILL.md`, `.claude/skills/<name>/SKILL.md`
+2. **Global-level**: `~/.config/opencode/skill/<name>/SKILL.md`, `~/.claude/skills/<name>/SKILL.md`
+
+**Usage Examples:**
 
 ```bash
-# Use PDF skill
+# Automatic skill loading (recommended)
+bun dev run "Extract text from document.pdf"
+
+# Explicit skill reference
 bun dev run "Use pdf skill to extract text from document.pdf"
 
 # Combine multiple skills
 bun dev run "Use pptx skill and theme-factory skill to create a presentation with Modern Minimalist theme"
+
+# Complex workflow with skills
+bun dev run "Use frontend-design skill to create a responsive dashboard component"
 ```
 
 Learn more in [USAGE_GUIDE.md](./USAGE_GUIDE.md#skills-使用指南).
