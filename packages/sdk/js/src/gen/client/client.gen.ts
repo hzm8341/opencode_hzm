@@ -184,7 +184,7 @@ export const createClient = (config: Config = {}): Client => {
       const { opts, url } = await beforeRequest(options)
       return createSseClient({
         ...opts,
-        body: opts.body as (Blob | ArrayBuffer | ArrayBufferView | FormData | URLSearchParams | ReadableStream<Uint8Array> | string) | null | undefined,
+        body: opts.body as RequestInit['body'],
         headers: opts.headers as unknown as Record<string, string>,
         method,
         url,
