@@ -264,9 +264,45 @@ A core feature that automatically triggers a complete 6-step execution flow with
 ```bash
 # Examples of automatic unified flow triggers
 bun dev run "Help me run the current project demo"
+bun dev run "帮我将当前的项目demo运行起来"
 bun dev run "Automatically complete user login functionality"
-bun dev run "Help me run demo"
 ```
+
+**Configuration:**
+
+The unified flow is enabled by default after installing `oh-my-opencode` plugin. Configure it globally or per-project:
+
+**Global Configuration** (`~/.config/opencode/opencode.jsonc`):
+```jsonc
+{
+  "plugin": ["oh-my-opencode"]
+}
+```
+
+**Hook Configuration** (`~/.config/opencode/oh-my-opencode.json`):
+```json
+{
+  "hooks": {
+    "unified-flow": {
+      "enabled": true
+    }
+  }
+}
+```
+
+**Using with OpenWork Desktop:**
+
+OpenWork Desktop provides a GUI for managing plugins and using unified flow:
+
+```bash
+cd packages/openwork-desktop
+pnpm install
+pnpm dev
+```
+
+- View and manage plugins in the **Plugins** tab
+- Switch between **Global** and **Project** scope
+- Use unified flow by entering trigger keywords in a new session
 
 **Key Features:**
 
@@ -276,8 +312,9 @@ bun dev run "Help me run demo"
 - 🔨 **Comprehensive Building** - Information integration and logical construction
 - ✅ **Quality Assurance** - Self-inspection with end-to-end verification
 - 📦 **Result Delivery** - Deliverables formatted as needed with execution summaries
+- 🖥️ **OpenWork Desktop Integration** - Manage plugins and use unified flow via GUI
 
-Learn more in [USAGE_GUIDE.md](./USAGE_GUIDE.md#oh-my-opencode-插件使用指南).
+Learn more in [USAGE_GUIDE.md](./USAGE_GUIDE.md#统一agent执行流程使用指南).
 
 #### Rules Injection System
 
@@ -468,6 +505,36 @@ Skills are automatically discovered from:
 
 1. **Project-level**: `.opencode/skill/<name>/SKILL.md`, `.claude/skills/<name>/SKILL.md`
 2. **Global-level**: `~/.config/opencode/skill/<name>/SKILL.md`, `~/.claude/skills/<name>/SKILL.md`
+
+**Global Skills Configuration:**
+
+To make a skill available globally across all projects:
+
+```bash
+# Create global skill directory
+mkdir -p ~/.config/opencode/skill
+
+# Link or copy skill
+cd ~/.config/opencode/skill
+ln -sf /path/to/skill-directory skill-name
+
+# Verify
+test -f ~/.config/opencode/skill/skill-name/SKILL.md && echo "✅ Skill configured"
+```
+
+**Pre-configured Global Skill:**
+
+The `planning-with-files` skill (Manus-style file-based planning) is pre-configured globally:
+
+```bash
+# Verify configuration
+ls -la ~/.config/opencode/skill/planning-with-files
+
+# Use in any project
+bun dev run "Use planning-with-files skill to plan a complex task"
+```
+
+See [skill-planning Global Configuration Guide](docs/skill-planning全局配置说明_v1.0_20250126_AI.md) for details.
 
 **Usage Examples:**
 

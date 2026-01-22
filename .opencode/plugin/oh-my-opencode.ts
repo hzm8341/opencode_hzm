@@ -1,0 +1,1 @@
+../../packages/plugin-oh-my-opencode/src/index.ts

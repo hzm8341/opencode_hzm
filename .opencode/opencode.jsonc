@@ -1,5 +1,6 @@
 {
   "$schema": "https://opencode.ai/config.json",
+  // 插件通过 .opencode/plugin/ 目录自动加载，无需在配置中指定
   // "plugin": ["opencode-openai-codex-auth"],
   // "enterprise": {
   //   "url": "https://enterprise.dev.opencode.ai",

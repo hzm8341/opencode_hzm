@@ -1,9 +1,13 @@
 {
   "$schema": "https://raw.githubusercontent.com/code-yeongyu/oh-my-opencode/master/assets/oh-my-opencode.schema.json",
-  "description": "OpenCode项目规则配置 - 确保rules-injector钩子启用",
+  "description": "OpenCode项目规则配置 - 启用统一Agent执行流程",
   "hooks": {
     "rules-injector": {
       "enabled": true
+    },
+    "unified-flow": {
+      "enabled": true
     }
-  }
+  },
+  "disabled_hooks": ["comment-checker"]
 }
