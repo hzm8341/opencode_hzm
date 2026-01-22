@@ -37,6 +37,29 @@ nix run nixpkgs#opencode           # or github:anomalyco/opencode for latest dev
 > [!TIP]
 > Remove versions older than 0.1.x before installing.
 
+#### Installing from Source (Windows)
+
+For Windows users who want to install from source, we provide automated setup scripts:
+
+**Quick Setup (Recommended):**
+```powershell
+powershell -ExecutionPolicy Bypass -File .\setup-windows-simple.ps1
+```
+
+**Full Setup (with system checks and verification):**
+```powershell
+powershell -ExecutionPolicy Bypass -File .\setup-windows-environment-en.ps1
+```
+
+These scripts will:
+- ✅ Check system requirements (Windows 10+, PowerShell 5.1+)
+- ✅ Automatically install Bun (if not installed)
+- ✅ Configure PATH environment variable
+- ✅ Install project dependencies
+- ✅ Verify installation
+
+For more details, see [Windows Setup Guide](WINDOWS_SETUP_README.md) or [Windows Installation Guide](docs/Windows环境安装配置指南_v1.0_20260122_AI.md).
+
 ### Desktop App (BETA)
 
 OpenCode is also available as a desktop application. Download directly from the [releases page](https://github.com/anomalyco/opencode/releases) or [opencode.ai/download](https://opencode.ai/download).

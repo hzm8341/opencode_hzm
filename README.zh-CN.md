@@ -37,6 +37,29 @@ nix run nixpkgs#opencode           # 或用 github:anomalyco/opencode 获取最�
 > [!TIP]
 > 安装前请先移除 0.1.x 之前的旧版本。
 
+#### 从源码安装（Windows）
+
+对于想要从源码安装的 Windows 用户，我们提供了自动化安装脚本：
+
+**快速安装（推荐）：**
+```powershell
+powershell -ExecutionPolicy Bypass -File .\setup-windows-simple.ps1
+```
+
+**完整安装（包含系统检查和验证）：**
+```powershell
+powershell -ExecutionPolicy Bypass -File .\setup-windows-environment-en.ps1
+```
+
+这些脚本将：
+- ✅ 检查系统要求（Windows 10+、PowerShell 5.1+）
+- ✅ 自动安装 Bun（如果未安装）
+- ✅ 配置 PATH 环境变量
+- ✅ 安装项目依赖
+- ✅ 验证安装
+
+更多详细信息，请参阅 [Windows 安装脚本说明](WINDOWS_SETUP_README.md) 或 [Windows 环境安装配置指南](docs/Windows环境安装配置指南_v1.0_20260122_AI.md)。
+
 ### 桌面应用程序 (BETA)
 
 OpenCode 也提供桌面版应用。可直接从 [发布页 (releases page)](https://github.com/anomalyco/opencode/releases) 或 [opencode.ai/download](https://opencode.ai/download) 下载。
