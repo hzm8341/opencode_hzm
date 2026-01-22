@@ -166,7 +166,7 @@ export class RunDemoVerificationStrategy implements VerificationStrategy {
     })
 
     const portCheck = await checkPort(host, port, 5000)
-    evidence.push({
+    evidence?.push({
       type: "port_check",
       data: JSON.stringify(portCheck),
     })
@@ -228,7 +228,7 @@ export class RunDemoVerificationStrategy implements VerificationStrategy {
         timeout: 10000,
       })
 
-      evidence.push({
+      evidence?.push({
         type: "command_output",
         data: output,
       })

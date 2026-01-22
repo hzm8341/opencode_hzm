@@ -439,7 +439,6 @@ const OhMyOpenCodePlugin: Plugin = async (ctx) => {
       await ralphLoop?.event(input);
       await sisyphusOrchestrator?.handler(input);
       await unifiedFlow?.handler(input);
-      await userInteractionDetector.handler(input);
 
       const { event } = input;
       const props = event.properties as Record<string, unknown> | undefined;
