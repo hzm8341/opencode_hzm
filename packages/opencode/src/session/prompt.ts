@@ -1675,6 +1675,6 @@ export namespace SessionPrompt {
       model: input.model,
       agent: input.agent,
       noReply: input.noReply,
-    }) as MessageV2.Assistant
+    }) as unknown as MessageV2.Assistant
   }
 }

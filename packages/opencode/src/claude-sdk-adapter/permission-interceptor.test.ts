@@ -124,8 +124,10 @@ describe("PermissionInterceptor", () => {
       const result = await handler("test-tool", {}, { signal: new AbortController().signal })
 
       expect(result.behavior).toBe("deny")
-      expect(result.message).toBeDefined()
-      expect(result.message).toBe("Custom denial")
+      if (result.behavior === "deny") {
+        expect(result.message).toBeDefined()
+        expect(result.message).toBe("Custom denial")
+      }
     })
 
     it("should fall through to OpenCode system when custom handler returns ask", async () => {
@@ -141,8 +143,8 @@ describe("PermissionInterceptor", () => {
       const handler = interceptor.createCanUseToolHandler(sessionID)
       
       // Mock PermissionNext.ask to resolve
-      const PermissionNext = await import("@/permission/next")
-      PermissionNext.PermissionNext.ask = mock(() => Promise.resolve())
+      // Note: PermissionNext.ask is read-only, so we can't mock it directly
+      // This test verifies the fall-through behavior when custom handler returns "ask"
 
       const result = await handler("test-tool", {}, { signal: new AbortController().signal })
 
@@ -153,7 +155,7 @@ describe("PermissionInterceptor", () => {
     it("should handle permission allow from rules", async () => {
       const PermissionNext = await import("@/permission/next")
       PermissionNext.PermissionNext.evaluate = mock(() => ({
-        action: "allow",
+        action: "allow" as const,
         permission: "test-tool",
         pattern: "*",
       }))
@@ -176,8 +178,10 @@ describe("PermissionInterceptor", () => {
       const result = await handler("test-tool", {}, { signal: new AbortController().signal })
 
       expect(result.behavior).toBe("deny")
-      expect(result.message).toBeDefined()
-      expect(result.message).toContain("denied by configuration")
+      if (result.behavior === "deny") {
+        expect(result.message).toBeDefined()
+        expect(result.message).toContain("denied by configuration")
+      }
     })
 
     it("should handle permission ask and grant", async () => {
@@ -210,8 +214,10 @@ describe("PermissionInterceptor", () => {
       const result = await handler("test-tool", {}, { signal: new AbortController().signal })
 
       expect(result.behavior).toBe("deny")
-      expect(result.message).toBeDefined()
-      expect(result.message).toContain("denied")
+      if (result.behavior === "deny") {
+        expect(result.message).toBeDefined()
+        expect(result.message).toContain("denied")
+      }
     })
 
     it("should handle permission ask and reject (RejectedError)", async () => {
@@ -229,8 +235,10 @@ describe("PermissionInterceptor", () => {
       const result = await handler("test-tool", {}, { signal: new AbortController().signal })
 
       expect(result.behavior).toBe("deny")
-      expect(result.message).toBeDefined()
-      expect(result.message).toContain("rejected")
+      if (result.behavior === "deny") {
+        expect(result.message).toBeDefined()
+        expect(result.message).toContain("rejected")
+      }
     })
 
     it("should handle abort signal", async () => {
@@ -253,8 +261,10 @@ describe("PermissionInterceptor", () => {
       const result = await handler("test-tool", {}, { signal: abortController.signal })
 
       expect(result.behavior).toBe("deny")
-      expect(result.message).toBeDefined()
-      expect(result.message).toContain("aborted")
+      if (result.behavior === "deny") {
+        expect(result.message).toBeDefined()
+        expect(result.message).toContain("aborted")
+      }
     })
 
     it("should map edit tools to edit permission", async () => {
