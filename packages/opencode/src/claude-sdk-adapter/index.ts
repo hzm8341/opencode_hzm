@@ -305,11 +305,28 @@ export class ClaudeAgentSDKAdapter {
               sessionID,
               role: "assistant",
               agent: "",
-              parts: [],
+              parentID: "",
+              modelID: "",
+              providerID: "",
+              mode: "",
+              path: {
+                cwd: process.cwd(),
+                root: process.cwd(),
+              },
+              cost: 0,
+              tokens: {
+                input: 0,
+                output: 0,
+                reasoning: 0,
+                cache: {
+                  read: 0,
+                  write: 0,
+                },
+              },
               time: {
                 created: Date.now(),
               },
-            } as MessageV2.Assistant,
+            },
           }
 
           while (!isComplete) {
@@ -402,7 +419,7 @@ export class ClaudeAgentSDKAdapter {
     directory: string
     title: string
   }): Promise<string> {
-    const session = await Session.create({
+    const session = await Session.createNext({
       directory: options.directory,
       title: options.title,
     })

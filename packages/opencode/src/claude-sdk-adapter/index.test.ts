@@ -77,7 +77,7 @@ describe("ClaudeAgentSDKAdapter", () => {
   describe("query", () => {
     it("should create a new session when resume is not provided", async () => {
       const Session = await import("@/session")
-      const createSpy = Session.Session.create as ReturnType<typeof mock>
+      const createSpy = Session.Session.create as any
 
       const q = adapter.query({
         prompt: "Test prompt",

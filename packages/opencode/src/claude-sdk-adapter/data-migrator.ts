@@ -139,7 +139,7 @@ export class DataMigrator {
    */
   private async migrateSession(
     session: ClaudeCoworkSession,
-    db: Database.Database,
+    db: Database,
     projectID?: string
   ): Promise<{ messagesCount: number }> {
     // Determine project ID from cwd
@@ -167,6 +167,7 @@ export class DataMigrator {
       projectID: finalProjectID,
       directory: session.cwd || process.cwd(),
       title: session.title,
+      version: "migrated",
       time: {
         created: session.created_at,
         updated: session.updated_at,
@@ -268,14 +269,19 @@ export class DataMigrator {
       completed: msg.created_at, // Estimate completion time
     }
 
-    // Write message
+    // Extract parts from message
+    const parts = (opencodeMessage as any).parts || []
+
+    // Write message (without parts)
+    const messageToWrite = { ...opencodeMessage }
+    delete (messageToWrite as any).parts
     await Storage.write(
       ["message", sessionID, opencodeMessage.id],
-      opencodeMessage
+      messageToWrite
     )
 
     // Write parts
-    for (const part of opencodeMessage.parts) {
+    for (const part of parts) {
       await Storage.write(
         ["part", opencodeMessage.id, part.id],
         {

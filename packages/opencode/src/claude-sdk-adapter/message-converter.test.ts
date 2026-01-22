@@ -28,7 +28,24 @@ describe("MessageConverter", () => {
             sessionID,
             role: "assistant",
             agent: "test-agent",
-            parts: [],
+            parentID: "",
+            modelID: "",
+            providerID: "",
+            mode: "",
+            path: {
+              cwd: process.cwd(),
+              root: process.cwd(),
+            },
+            cost: 0,
+            tokens: {
+              input: 0,
+              output: 0,
+              reasoning: 0,
+              cache: {
+                read: 0,
+                write: 0,
+              },
+            },
             time: { created: Date.now() },
           },
         },
@@ -88,6 +105,9 @@ describe("MessageConverter", () => {
             messageID: "msg-1",
             type: "reasoning",
             text: "Let me think about this...",
+            time: {
+              start: Date.now(),
+            },
           },
           messageID: "msg-1",
         },
@@ -122,6 +142,7 @@ describe("MessageConverter", () => {
             state: {
               status: "pending",
               input: { command: "echo hello" },
+              raw: "echo hello",
             },
           },
           messageID: "msg-1",
@@ -159,6 +180,7 @@ describe("MessageConverter", () => {
             state: {
               status: "pending",
               input: { command: "echo hello" },
+              raw: "echo hello",
             },
           },
           messageID: "msg-1",
@@ -177,6 +199,7 @@ describe("MessageConverter", () => {
               input: { command: "echo hello" },
               output: "hello",
               title: "Execute command",
+              metadata: {},
               time: {
                 start: Date.now(),
                 end: Date.now(),
@@ -310,6 +333,8 @@ describe("MessageConverter", () => {
               status: "completed",
               input: { path: "file.txt" },
               output: "file content",
+              title: "Read file",
+              metadata: {},
               time: {
                 start: Date.now(),
                 end: Date.now(),
@@ -331,6 +356,8 @@ describe("MessageConverter", () => {
               status: "completed",
               input: { command: "command1" },
               output: "result1",
+              title: "Execute command",
+              metadata: {},
               time: {
                 start: Date.now(),
                 end: Date.now(),

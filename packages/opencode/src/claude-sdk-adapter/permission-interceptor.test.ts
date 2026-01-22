@@ -124,6 +124,7 @@ describe("PermissionInterceptor", () => {
       const result = await handler("test-tool", {}, { signal: new AbortController().signal })
 
       expect(result.behavior).toBe("deny")
+      expect(result.message).toBeDefined()
       expect(result.message).toBe("Custom denial")
     })
 
@@ -175,6 +176,7 @@ describe("PermissionInterceptor", () => {
       const result = await handler("test-tool", {}, { signal: new AbortController().signal })
 
       expect(result.behavior).toBe("deny")
+      expect(result.message).toBeDefined()
       expect(result.message).toContain("denied by configuration")
     })
 
@@ -208,6 +210,7 @@ describe("PermissionInterceptor", () => {
       const result = await handler("test-tool", {}, { signal: new AbortController().signal })
 
       expect(result.behavior).toBe("deny")
+      expect(result.message).toBeDefined()
       expect(result.message).toContain("denied")
     })
 
@@ -226,6 +229,7 @@ describe("PermissionInterceptor", () => {
       const result = await handler("test-tool", {}, { signal: new AbortController().signal })
 
       expect(result.behavior).toBe("deny")
+      expect(result.message).toBeDefined()
       expect(result.message).toContain("rejected")
     })
 
@@ -249,6 +253,7 @@ describe("PermissionInterceptor", () => {
       const result = await handler("test-tool", {}, { signal: abortController.signal })
 
       expect(result.behavior).toBe("deny")
+      expect(result.message).toBeDefined()
       expect(result.message).toContain("aborted")
     })
 

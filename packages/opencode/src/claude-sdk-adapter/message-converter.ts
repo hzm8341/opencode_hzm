@@ -280,7 +280,7 @@ export class MessageConverter {
           type: "tool-result",
           result: {
             error: state.error,
-            output: state.output || "",
+            output: "",
           },
           id: mapping.sdkToolCallId,
         }
@@ -324,7 +324,7 @@ export class MessageConverter {
     sdkMessages: SDKMessage[],
     sessionID: string,
     agentName: string
-  ): Promise<MessageV2.Assistant> {
+  ): Promise<MessageV2.Assistant & { parts: MessageV2.Part[] }> {
     const parts: MessageV2.Part[] = []
     let textBuffer = ""
     const toolCallStack: Array<{ callID: string; toolName: string; input: unknown }> = []
@@ -363,6 +363,7 @@ export class MessageConverter {
           state: {
             status: "pending",
             input: msg.input as Record<string, unknown>,
+            raw: JSON.stringify(msg.input),
           },
         })
       } else if (msg.type === "tool-result") {
@@ -377,25 +378,35 @@ export class MessageConverter {
           const result = msg.result as { error?: string; output?: string } | string
           const isError = typeof result === "object" && "error" in result && result.error
 
-          lastToolPart.state = {
-            status: isError ? "error" : "completed",
-            input: lastToolPart.state.input,
-            output: isError
-              ? (result as { error: string }).error
-              : typeof result === "string"
+          if (isError) {
+            lastToolPart.state = {
+              status: "error",
+              input: lastToolPart.state.input,
+              error: (result as { error: string }).error,
+              metadata: {
+                migratedFrom: "claude-sdk",
+              },
+              time: {
+                start: Date.now(),
+                end: Date.now(),
+              },
+            }
+          } else {
+            lastToolPart.state = {
+              status: "completed",
+              input: lastToolPart.state.input,
+              output: typeof result === "string"
                 ? result
                 : JSON.stringify(result),
-            title: "",
-            metadata: {
-              migratedFrom: "claude-sdk",
-            },
-            time: {
-              start: Date.now(),
-              end: Date.now(),
-            },
-            ...(isError && {
-              error: (result as { error: string }).error,
-            }),
+              title: "",
+              metadata: {
+                migratedFrom: "claude-sdk",
+              },
+              time: {
+                start: Date.now(),
+                end: Date.now(),
+              },
+            }
           }
         } else {
           log.warn("Tool result without matching tool call", { sessionID })
@@ -424,7 +435,25 @@ export class MessageConverter {
       id: messageID,
       sessionID,
       role: "assistant",
+      parentID: "",
+      modelID: "",
+      providerID: "",
+      mode: "",
       agent: agentName,
+      path: {
+        cwd: process.cwd(),
+        root: process.cwd(),
+      },
+      cost: 0,
+      tokens: {
+        input: 0,
+        output: 0,
+        reasoning: 0,
+        cache: {
+          read: 0,
+          write: 0,
+        },
+      },
       parts,
       time: {
         created: Date.now(),
