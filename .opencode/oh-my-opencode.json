@@ -1,0 +1,9 @@
+{
+  "$schema": "https://raw.githubusercontent.com/code-yeongyu/oh-my-opencode/master/assets/oh-my-opencode.schema.json",
+  "description": "OpenCode项目规则配置 - 确保rules-injector钩子启用",
+  "hooks": {
+    "rules-injector": {
+      "enabled": true
+    }
+  }
+}

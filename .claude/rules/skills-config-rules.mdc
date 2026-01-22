@@ -1,0 +1,47 @@
+---
+globs: ["*"]
+description: "Skills配置和使用规则"
+alwaysApply: true
+---
+
+## Skills 配置和使用规则
+
+- **Skills 仓库位置**：https://github.com/hzm8341/cursor_skill
+- **Skills 配置目录**：`~/.config/opencode/skill/`（全局）或 `.opencode/skill/`（项目级）
+- **配置方法**（按优先级）：
+  1. **使用同步脚本（推荐）**：
+     ```bash
+     # 克隆 skills 仓库
+     git clone https://github.com/hzm8341/cursor_skill.git
+     
+     # 使用 OpenCode 项目的同步脚本
+     cd /path/to/opencode
+     ./scripts/sync-skills.sh sync /path/to/cursor_skill
+     ```
+  2. **手动创建符号链接**：
+     ```bash
+     mkdir -p ~/.config/opencode/skill
+     cd ~/.config/opencode/skill
+     ln -s /path/to/cursor_skill/algorithmic-art algorithmic-art
+     # ... 为其他 skills 创建链接
+     ```
+  3. **复制到标准目录**：
+     ```bash
+     cp -r cursor_skill/* ~/.config/opencode/skill/
+     ```
+- **跨设备同步**：
+  - 使用 Git 克隆仓库到每台设备
+  - 在每台设备上运行同步脚本创建符号链接
+  - 或使用云存储（Dropbox、OneDrive等）同步 skills 目录
+- **验证配置**：
+  ```bash
+  # 检查链接
+  ls -la ~/.config/opencode/skill/
+  
+  # 使用同步脚本验证
+  ./scripts/sync-skills.sh verify
+  
+  # 列出所有 skills
+  ./scripts/sync-skills.sh list
+  ```
+- **Skills 文档**：详细使用指南见 `docs/Cursor_Skills_使用指南_v1.0_20250116_AI.md`

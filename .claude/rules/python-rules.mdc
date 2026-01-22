@@ -1,0 +1,22 @@
+---
+globs: ["*.py", "**/*.py"]
+description: "Python代码规范 - 适用于Python文件"
+---
+
+## 通用代码规范
+
+- 遵循PEP 8风格：4空格缩进，snake_case命名
+- 使用描述性变量名（如robot_pose、reward_function、sensor_data）
+- 始终包含错误处理（try-except）以应对传感器故障或仿真崩溃
+- 优先使用向量化操作（NumPy/JAX）而非循环，优化性能
+- 编写简洁、技术性的Python代码，提供准确的示例
+- 使用函数式编程模式；除非用于有状态的机器人控制器，否则避免不必要的类
+- 确保代码与仿真环境兼容：避免副作用，对JAX/并行计算使用不可变数据
+
+## Python特定要求
+
+- 优先使用PyTorch进行深度学习，确保代码可复现（设置随机种子）
+- 强化学习（RL）：优先使用Stable Baselines3、Ray RLlib等成熟框架
+- 算法实现：提供清晰的数学公式注释，说明算法步骤
+- 实验管理：使用MLflow或Weights & Biases记录实验
+- 代码风格：遵循PyTorch官方代码风格指南
