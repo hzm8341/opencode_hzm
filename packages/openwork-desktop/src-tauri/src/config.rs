@@ -10,6 +10,23 @@ pub fn resolve_opencode_config_path(scope: &str, project_dir: &str) -> Result<Pa
       if project_dir.trim().is_empty() {
         return Err("projectDir is required".to_string());
       }
+      // Try .opencode/opencode.jsonc first (matching OpenCode's behavior)
+      let opencode_dir = PathBuf::from(project_dir).join(".opencode");
+      let jsonc_path1 = opencode_dir.join("opencode.jsonc");
+      if jsonc_path1.exists() {
+        return Ok(jsonc_path1);
+      }
+      // Try opencode.jsonc in project root
+      let jsonc_path2 = PathBuf::from(project_dir).join("opencode.jsonc");
+      if jsonc_path2.exists() {
+        return Ok(jsonc_path2);
+      }
+      // Try .opencode/opencode.json
+      let json_path1 = opencode_dir.join("opencode.json");
+      if json_path1.exists() {
+        return Ok(json_path1);
+      }
+      // Fallback to opencode.json in project root
       Ok(PathBuf::from(project_dir).join("opencode.json"))
     }
     "global" => {
@@ -21,7 +38,13 @@ pub fn resolve_opencode_config_path(scope: &str, project_dir: &str) -> Result<Pa
         return Err("Unable to resolve config directory".to_string());
       };
 
-      Ok(base.join("opencode").join("opencode.json"))
+      let config_dir = base.join("opencode");
+      // Try jsonc first, then json (matching OpenCode's behavior)
+      let jsonc_path = config_dir.join("opencode.jsonc");
+      if jsonc_path.exists() {
+        return Ok(jsonc_path);
+      }
+      Ok(config_dir.join("opencode.json"))
     }
     _ => Err("scope must be 'project' or 'global'".to_string()),
   }

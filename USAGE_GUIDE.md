@@ -1,9 +1,10 @@
 # OpenCode 使用指南
 
-**版本**: v1.5  
+**版本**: v1.6  
 **日期**: 2025-01-07  
-**最后更新**: 2026-01-16  
-**合并说明**: 已合并 USAGE_GUIDE_temp.md 的内容
+**最后更新**: 2025-01-26  
+**合并说明**: 已合并 USAGE_GUIDE_temp.md 的内容  
+**更新说明**: 添加统一Agent执行流程配置方法和OpenWork Desktop集成说明
 
 ---
 
@@ -2591,27 +2592,149 @@ bun dev run "添加用户头像上传功能"
 
 ### 配置
 
-#### 启用/禁用统一流程
+#### 启用统一流程
 
-统一流程Hook默认启用。可以通过配置文件禁用：
+统一流程功能需要安装和配置 `oh-my-opencode` 插件。配置完成后，统一流程Hook默认启用。
 
-**The unified flow hook is enabled by default. You can disable it via config:**
+**The unified flow feature requires installing and configuring the `oh-my-opencode` plugin. After configuration, the unified flow hook is enabled by default.**
 
-在 `oh-my-opencode.json` 中配置：
+##### 全局配置（推荐）
 
-```json
-{
-  "disabled_hooks": [] // 不包含 "unified-flow" 则默认启用
-}
-```
+全局配置使统一流程在所有项目中可用：
 
-禁用统一流程：
+**Global configuration enables unified flow in all projects:**
+
+1. **安装插件**（如果尚未安装）:
+   ```bash
+   bunx oh-my-opencode install
+   ```
+
+2. **配置全局插件** (`~/.config/opencode/opencode.jsonc`):
+   ```jsonc
+   {
+     "$schema": "https://opencode.ai/config.json",
+     "plugin": ["oh-my-opencode"],
+     "provider": {
+       "opencode": {
+         "options": {}
+       }
+     }
+   }
+   ```
+
+3. **配置Hook** (`~/.config/opencode/oh-my-opencode.json`):
+   ```json
+   {
+     "$schema": "https://raw.githubusercontent.com/code-yeongyu/oh-my-opencode/master/assets/oh-my-opencode.schema.json",
+     "description": "全局配置 - 启用统一Agent执行流程",
+     "hooks": {
+       "rules-injector": {
+         "enabled": true
+       },
+       "unified-flow": {
+         "enabled": true
+       }
+     },
+     "disabled_hooks": ["comment-checker"]
+   }
+   ```
+
+##### 项目配置
+
+项目级配置仅对当前项目生效：
+
+**Project-level configuration only applies to the current project:**
+
+1. **创建项目配置目录**:
+   ```bash
+   mkdir -p .opencode/plugin
+   ```
+
+2. **创建插件符号链接**（如果使用本地插件）:
+   ```bash
+   ln -sf ../../packages/plugin-oh-my-opencode/src/index.ts .opencode/plugin/oh-my-opencode.ts
+   ```
+
+3. **配置项目Hook** (`.opencode/oh-my-opencode.json`):
+   ```json
+   {
+     "$schema": "https://raw.githubusercontent.com/code-yeongyu/oh-my-opencode/master/assets/oh-my-opencode.schema.json",
+     "description": "项目配置 - 启用统一Agent执行流程",
+     "hooks": {
+       "rules-injector": {
+         "enabled": true
+       },
+       "unified-flow": {
+         "enabled": true
+       }
+     },
+     "disabled_hooks": ["comment-checker"]
+   }
+   ```
+
+#### 禁用统一流程
+
+如果需要禁用统一流程，可以在配置文件中添加：
+
+**To disable unified flow, add to config:**
 
 ```json
 {
   "disabled_hooks": ["unified-flow"]
 }
 ```
+
+#### 在 OpenWork Desktop 中使用
+
+OpenWork Desktop 是一个图形界面应用，可以更方便地管理和使用统一流程功能。
+
+**OpenWork Desktop is a GUI application that makes it easier to manage and use unified flow:**
+
+1. **启动 OpenWork Desktop**:
+   ```bash
+   cd packages/openwork-desktop
+   pnpm install  # 如果还没有安装依赖
+   pnpm dev
+   ```
+
+2. **查看和管理插件**:
+   - 打开应用后，进入 **Plugins** 标签页
+   - 切换到 **Global** scope 查看全局插件
+   - 切换到 **Project** scope 查看项目插件
+   - 应该能看到 `oh-my-opencode` 插件已安装
+
+3. **使用统一流程**:
+   - 选择一个工作空间
+   - 创建新会话
+   - 输入包含触发关键词的提示，例如："帮我将当前的项目demo运行起来"
+   - 系统会自动触发统一流程的6阶段执行
+
+**配置同步**:
+- OpenWork Desktop 支持读取和编辑 `opencode.jsonc` 和 `opencode.json` 文件
+- 全局配置位置: `~/.config/opencode/opencode.jsonc`
+- 项目配置位置: `.opencode/opencode.jsonc`
+- 配置修改后会自动同步到 OpenCode CLI
+
+#### 验证配置
+
+运行以下命令验证配置是否正确：
+
+**Run the following command to verify configuration:**
+
+```bash
+# 检查全局配置
+cat ~/.config/opencode/opencode.jsonc
+cat ~/.config/opencode/oh-my-opencode.json
+
+# 检查项目配置
+cat .opencode/opencode.jsonc
+cat .opencode/oh-my-opencode.json
+
+# 测试统一流程触发
+bun dev run "帮我将当前的项目demo运行起来"
+```
+
+如果看到系统自动进入6阶段执行流程，说明配置成功。
 
 ### 端到端验证系统
 
@@ -2763,6 +2886,116 @@ bun dev run "帮我选择数据库类型"
 - **安全性**：密码输入会被隐藏，不会在日志中显示
 - **超时**：可以设置超时时间，超时后可以取消或使用默认值
 - **取消**：用户可以随时取消交互，系统会相应地处理
+
+### OpenWork Desktop 集成
+
+OpenWork Desktop 是一个基于 Tauri 的桌面应用，为 OpenCode 提供图形界面，让统一流程功能更易于使用和管理。
+
+**OpenWork Desktop is a Tauri-based desktop application that provides a GUI for OpenCode, making unified flow easier to use and manage.**
+
+#### 主要功能
+
+- 🖥️ **图形界面**: 无需使用终端，通过 GUI 管理插件和使用统一流程
+- 📦 **插件管理**: 可视化查看和管理全局/项目级插件
+- 🔄 **配置同步**: 自动同步 OpenCode CLI 和 OpenWork Desktop 的配置
+- 📊 **会话管理**: 创建和管理多个会话
+- 📝 **实时更新**: SSE 事件订阅，实时查看执行进度
+
+#### 安装和启动
+
+**从源码运行**:
+
+```bash
+cd packages/openwork-desktop
+pnpm install
+pnpm dev
+```
+
+**下载预编译版本**:
+
+访问 [OpenWork Desktop Releases](https://github.com/different-ai/openwork/releases) 下载对应平台的安装包。
+
+#### 使用统一流程
+
+1. **启动 OpenWork Desktop**
+   - 打开应用后，选择或创建工作空间
+
+2. **查看插件配置**
+   - 进入 **Plugins** 标签页
+   - 切换到 **Global** scope 查看全局插件（`~/.config/opencode/opencode.jsonc`）
+   - 切换到 **Project** scope 查看项目插件（`.opencode/opencode.jsonc`）
+   - 确认 `oh-my-opencode` 插件已安装
+
+3. **使用统一流程**
+   - 创建一个新会话
+   - 在输入框中输入包含触发关键词的提示，例如：
+     - "帮我将当前的项目demo运行起来"
+     - "自动完成用户登录功能"
+     - "帮我修复登录bug"
+   - 系统会自动检测并触发统一流程的6阶段执行
+
+4. **查看执行进度**
+   - 实时查看任务执行进度
+   - 查看计划更新和任务分解
+   - 查看端到端验证结果
+
+#### 配置管理
+
+OpenWork Desktop 支持两种配置范围：
+
+**Global Scope** (`~/.config/opencode/`):
+- `opencode.jsonc` / `opencode.json` - 主配置文件
+- `oh-my-opencode.json` - Hook 配置文件
+
+**Project Scope** (`.opencode/`):
+- `opencode.jsonc` / `opencode.json` - 项目配置文件
+- `oh-my-opencode.json` - 项目 Hook 配置
+- `plugin/` - 项目级插件目录
+
+**配置同步**:
+- OpenWork Desktop 会优先读取 `opencode.jsonc` 文件
+- 如果不存在，则读取 `opencode.json` 文件
+- 配置修改会自动同步到 OpenCode CLI
+
+#### 与 CLI 的兼容性
+
+OpenWork Desktop 与 OpenCode CLI 完全兼容：
+
+- ✅ 使用相同的配置文件格式
+- ✅ 支持相同的插件系统
+- ✅ 统一流程功能在 CLI 和 GUI 中行为一致
+- ✅ 配置可以在 CLI 和 GUI 之间无缝切换
+
+**推荐工作流**:
+- 使用 OpenWork Desktop 进行日常开发和任务管理
+- 使用 CLI 进行自动化脚本和 CI/CD 集成
+- 两者共享相同的配置，确保一致性
+
+#### 故障排查
+
+**问题1: 插件未显示**
+
+解决方案:
+1. 点击 **Refresh** 按钮刷新插件列表
+2. 检查配置文件是否存在且格式正确
+3. 确认插件名称正确（区分大小写）
+
+**问题2: 统一流程未触发**
+
+解决方案:
+1. 确认 `oh-my-opencode` 插件已安装
+2. 检查 `oh-my-opencode.json` 中 `unified-flow` hook 已启用
+3. 确认输入包含触发关键词
+4. 查看 OpenCode 服务器日志
+
+**问题3: 配置未同步**
+
+解决方案:
+1. 确认配置文件路径正确
+2. 检查文件权限
+3. 重启 OpenWork Desktop
+
+更多信息请参考 [OpenWork Desktop 集成说明](docs/OpenWork集成说明_v1.0_20250126_AI.md)。
 - **自动继续**：用户提供输入后，系统会自动继续执行，无需手动恢复
 
 ### 最佳实践
@@ -3183,6 +3416,120 @@ Skills 可以通过以下位置自动发现：
 2. **全局级别**
    - `~/.config/opencode/skill/<name>/SKILL.md`
    - `~/.claude/skills/<name>/SKILL.md`
+
+**优先级说明**：项目级别的 Skills 优先级高于全局级别。如果同一个 Skill 在项目级和全局级都存在，将优先使用项目级的版本。
+
+### 全局 Skills 配置
+
+#### 配置方法
+
+要将项目中的 Skills 配置为全局可用（在所有项目中都可以使用），有以下几种方法：
+
+**方法1：创建符号链接（推荐）**
+
+```bash
+# 1. 创建全局 skill 目录
+mkdir -p ~/.config/opencode/skill
+
+# 2. 创建符号链接到项目中的 skill
+cd ~/.config/opencode/skill
+ln -sf /path/to/opencode_hzm/skills/<skill-name> <skill-name>
+
+# 例如：配置 pdf skill 为全局可用
+ln -sf /Users/minghu/Downloads/opencode_hzm/skills/pdf pdf
+
+# 3. 验证配置
+test -f ~/.config/opencode/skill/<skill-name>/SKILL.md && echo "✅ Skill 配置成功" || echo "❌ Skill 配置失败"
+```
+
+**方法2：使用同步脚本（如果可用）**
+
+```bash
+# 如果有同步脚本，可以使用
+cd /path/to/opencode_hzm
+./scripts/sync-skills.sh sync /path/to/skills/repository
+```
+
+**方法3：复制到全局目录**
+
+```bash
+# 复制 skill 到全局目录（不推荐，因为更新不会自动同步）
+cp -r /path/to/opencode_hzm/skills/<skill-name> ~/.config/opencode/skill/
+```
+
+#### 已配置的全局 Skill
+
+当前已配置为全局可用的 Skill：
+
+- **planning-with-files** - Manus 风格的文件规划模式
+  - 路径：`~/.config/opencode/skill/planning-with-files` → `/Users/minghu/Downloads/opencode_hzm/packages/skill-planning`
+  - 验证：`ls -la ~/.config/opencode/skill/planning-with-files`
+  - 使用：`bun dev run "使用 planning-with-files skill 规划复杂任务"`
+
+#### 配置项目中的 Skills 为全局可用
+
+项目 `skills/` 目录下的所有 Skills 都可以配置为全局可用：
+
+**可用的项目级 Skills：**
+
+- `pdf` - PDF 文档处理
+- `docx` - Word 文档处理
+- `pptx` - PowerPoint 演示文稿处理
+- `xlsx` - Excel 电子表格处理
+- `frontend-design` - 前端设计
+- `canvas-design` - 画布设计
+- `algorithmic-art` - 算法艺术
+- `theme-factory` - 主题工厂
+- `brand-guidelines` - 品牌指南
+- `web-artifacts-builder` - Web 工件构建器
+- `webapp-testing` - Web 应用测试
+- `mcp-builder` - MCP 服务器构建器
+- `skill-creator` - Skill 创建工具
+- `internal-comms` - 内部通信
+- `doc-coauthoring` - 文档协作
+- `slack-gif-creator` - Slack GIF 创建器
+
+**批量配置示例：**
+
+```bash
+# 创建全局目录
+mkdir -p ~/.config/opencode/skill
+
+# 批量创建符号链接
+cd ~/.config/opencode/skill
+for skill in pdf docx pptx xlsx frontend-design canvas-design algorithmic-art theme-factory brand-guidelines web-artifacts-builder webapp-testing mcp-builder skill-creator internal-comms doc-coauthoring slack-gif-creator; do
+  ln -sf /Users/minghu/Downloads/opencode_hzm/skills/$skill $skill
+done
+
+# 验证所有配置
+for skill in pdf docx pptx xlsx frontend-design canvas-design algorithmic-art theme-factory brand-guidelines web-artifacts-builder webapp-testing mcp-builder skill-creator internal-comms doc-coauthoring slack-gif-creator; do
+  test -f ~/.config/opencode/skill/$skill/SKILL.md && echo "✅ $skill" || echo "❌ $skill"
+done
+```
+
+#### 验证全局配置
+
+```bash
+# 检查所有全局配置的 skills
+ls -la ~/.config/opencode/skill/
+
+# 验证特定 skill
+test -f ~/.config/opencode/skill/<skill-name>/SKILL.md && echo "✅ 已配置" || echo "❌ 未配置"
+
+# 查看符号链接指向
+readlink ~/.config/opencode/skill/<skill-name>
+```
+
+#### 使用全局 Skills
+
+配置为全局可用的 Skills 可以在任何项目中使用：
+
+```bash
+# 在任何项目中都可以使用全局 skill
+cd /path/to/any/project
+bun dev run "使用 pdf skill 提取文档内容"
+bun dev run "使用 frontend-design skill 创建响应式组件"
+```
 
 ### 可用 Skills 列表
 

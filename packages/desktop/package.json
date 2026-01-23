@@ -10,7 +10,9 @@
     "dev": "vite",
     "build": "bun run typecheck && vite build",
     "preview": "vite preview",
-    "tauri": "tauri"
+    "tauri": "tauri",
+    "build:dmg": "bash build-dmg.sh",
+    "build:dmg:prod": "bash build-dmg-prod.sh"
   },
   "dependencies": {
     "@opencode-ai/app": "workspace:*",
