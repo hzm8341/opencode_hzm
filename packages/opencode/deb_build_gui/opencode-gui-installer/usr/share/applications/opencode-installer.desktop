@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=OpenCode Installer
+Comment=OpenCode GUI Installation Program
+Exec=/usr/share/opencode-installer/install-gui.sh
+Icon=system-software-install
+Terminal=false
+Categories=System;PackageManager;

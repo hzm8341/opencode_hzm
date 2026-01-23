@@ -194,6 +194,31 @@ Transform your AI agent into a full development team with specialized agents, ul
 - 📝 **Rules Injection System** - Define and enforce unified behavior rules for AI Agents across all projects
 - 🔄 **Unified Agent Execution Flow** - Automatic 6-step execution flow from task parsing to delivery
 
+#### Everything Claude Code Integration
+
+OpenCode supports [Everything Claude Code](https://github.com/affaan-m/everything-claude-code) configuration collection, providing battle-tested agents, skills, commands, and rules.
+
+**Quick Install:**
+
+```bash
+# Using installation script (recommended)
+./scripts/install-everything-claude-code.sh
+
+# Or manual installation
+# See docs/everything-claude-code_融合实施计划_v1.0_20260126_AI.md
+```
+
+**What's Included:**
+
+- **9 Professional Agents**: planner, architect, code-reviewer, security-reviewer, build-error-resolver, e2e-runner, refactor-cleaner, doc-updater, tdd-guide
+- **14 Practical Commands**: `/plan`, `/tdd`, `/code-review`, `/e2e`, `/build-fix`, `/refactor-clean`, `/update-docs`, `/checkpoint`, `/verify`, `/learn`, `/eval`, `/orchestrate`, `/test-coverage`, `/update-codemaps`, `/setup-pm`
+- **11 Professional Skills**: backend-patterns, frontend-patterns, tdd-workflow, security-review, verification-loop, eval-harness, continuous-learning, strategic-compact, coding-standards, clickhouse-io, project-guidelines-example
+- **8 Best Practice Rules**: security, coding-style, testing, git-workflow, agents, performance, memory, context
+- **Complete Hooks Configuration**: Automated workflows
+- **MCP Server Configurations**: GitHub, Supabase, Vercel, Railway, and more
+
+For detailed documentation, see [Everything Claude Code Integration Guide](./docs/everything-claude-code_融合实施计划_v1.0_20260126_AI.md).
+
 ```bash
 # Install
 bunx oh-my-opencode install

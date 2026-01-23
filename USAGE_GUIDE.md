@@ -1272,6 +1272,54 @@ bun dev run --agent plan "任务2" /path/to/project2
 
 ---
 
+## Everything Claude Code 集成
+
+OpenCode 支持 [Everything Claude Code](https://github.com/affaan-m/everything-claude-code) 配置集合，提供经过实战验证的 agents、skills、commands 和 rules。
+
+### 快速安装
+
+```bash
+# 使用安装脚本（推荐）
+./scripts/install-everything-claude-code.sh
+
+# 或手动安装
+# 详见: docs/everything-claude-code_融合实施计划_v1.0_20260126_AI.md
+```
+
+### 包含的内容
+
+- **9 个专业 Agents**: planner（规划专家）、architect（架构设计专家）、code-reviewer（代码审查专家）、security-reviewer（安全审查专家）、build-error-resolver（构建错误修复专家）、e2e-runner（E2E 测试专家）、refactor-cleaner（重构清理专家）、doc-updater（文档更新专家）、tdd-guide（TDD 指南专家）
+- **14 个实用 Commands**: `/plan`（创建实施计划）、`/tdd`（测试驱动开发）、`/code-review`（代码审查）、`/e2e`（E2E 测试生成）、`/build-fix`（修复构建错误）、`/refactor-clean`（重构和清理）、`/update-docs`（更新文档）、`/checkpoint`（保存检查点）、`/verify`（运行验证循环）、`/learn`（提取模式）、`/eval`（评估）、`/orchestrate`（编排任务）、`/test-coverage`（测试覆盖率）、`/update-codemaps`（更新代码地图）、`/setup-pm`（配置包管理器）
+- **11 个专业 Skills**: backend-patterns（后端模式）、frontend-patterns（前端模式）、tdd-workflow（TDD 工作流）、security-review（安全审查）、verification-loop（验证循环）、eval-harness（评估框架）、continuous-learning（持续学习）、strategic-compact（战略压缩）、coding-standards（编码标准）、clickhouse-io（ClickHouse 集成）、project-guidelines-example（项目指南示例）
+- **8 个最佳实践 Rules**: security（安全规则）、coding-style（编码风格）、testing（测试规则）、git-workflow（Git 工作流）、agents（Agents 规则）、performance（性能规则）、memory（内存规则）、context（上下文规则）
+- **完整的 Hooks 配置**: 自动化工作流
+- **MCP 服务器配置**: GitHub、Supabase、Vercel、Railway 等
+
+### 使用示例
+
+```bash
+# 使用 planner agent 创建计划
+opencode run "@planner 创建一个新的用户认证系统"
+
+# 使用 code-reviewer agent 审查代码
+opencode run "@code-reviewer 审查 src/auth/ 目录下的代码"
+
+# 使用 /plan 命令创建实施计划
+opencode run "/plan 实现用户登录功能"
+
+# 使用 /tdd 命令进行测试驱动开发
+opencode run "/tdd 创建用户服务测试"
+
+# 使用 /code-review 命令进行代码审查
+opencode run "/code-review 审查最近的提交"
+```
+
+### 详细文档
+
+- **融合总结**: [everything-claude-code_融合总结_v1.0_20260126_AI.md](./docs/everything-claude-code_融合总结_v1.0_20260126_AI.md)
+- **融合评估报告**: [everything-claude-code_融合评估报告_v1.0_20260126_AI.md](./docs/everything-claude-code_融合评估报告_v1.0_20260126_AI.md)
+- **融合实施计划**: [everything-claude-code_融合实施计划_v1.0_20260126_AI.md](./docs/everything-claude-code_融合实施计划_v1.0_20260126_AI.md)
+
 ## 相关链接
 
 - **官方网站** / **Official Website**: https:/

@@ -159,6 +159,51 @@ Homepage: https://opencode.ai
     await $`cp ${licensePath} ${debDir}/usr/share/doc/${packageName}/LICENSE`
   }
 
+  // 创建 postinst 脚本（安装后自动执行）
+  const postinstContent = `#!/bin/bash
+set -e
+
+# 确保可执行文件有正确的权限
+chmod +x /usr/bin/opencode 2>/dev/null || true
+
+# 更新系统命令数据库
+if command -v update-alternatives >/dev/null 2>&1; then
+    update-alternatives --install /usr/bin/opencode opencode /usr/bin/opencode 100 2>/dev/null || true
+fi
+
+# 显示安装完成信息
+echo ""
+echo "✅ OpenCode 安装完成！"
+echo ""
+echo "使用方法："
+echo "  opencode --version    # 查看版本"
+echo "  opencode --help       # 查看帮助"
+echo "  opencode              # 启动 OpenCode"
+echo ""
+echo "首次使用需要配置 API 密钥："
+echo "  opencode              # 启动后输入 /connect"
+echo ""
+exit 0
+`
+
+  await Bun.file(path.join(debDir, "DEBIAN", "postinst")).write(postinstContent)
+  await $`chmod +x ${path.join(debDir, "DEBIAN", "postinst")}`
+
+  // 创建 prerm 脚本（卸载前执行）
+  const prermContent = `#!/bin/bash
+set -e
+
+# 清理符号链接
+if command -v update-alternatives >/dev/null 2>&1; then
+    update-alternatives --remove opencode /usr/bin/opencode 2>/dev/null || true
+fi
+
+exit 0
+`
+
+  await Bun.file(path.join(debDir, "DEBIAN", "prerm")).write(prermContent)
+  await $`chmod +x ${path.join(debDir, "DEBIAN", "prerm")}`
+
   // 构建 DEB 包
   console.log("🔨 Building DEB package...")
   const debFile = path.join(dir, "dist", `${packageName}_${version}_${arch}.deb`)
@@ -169,11 +214,14 @@ Homepage: https://opencode.ai
     console.log("")
     console.log(`✅ DEB package created: ${debFile}`)
     console.log("")
-    console.log("📥 To install:")
+    console.log("📥 安装方法（简单直接）：")
     console.log(`   sudo dpkg -i ${debFile}`)
+    console.log(`   sudo apt-get install -f  # 如果有依赖问题`)
     console.log("")
-    console.log("🧪 To test:")
+    console.log("✅ 安装后直接使用：")
     console.log("   opencode --version")
+    console.log("   opencode --help")
+    console.log("   opencode")
     console.log("")
     
     // 显示文件信息

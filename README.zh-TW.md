@@ -278,6 +278,31 @@ bun dev run "幫我運行demo"
 
 更多資訊請查看 [USAGE_GUIDE.md](./USAGE_GUIDE.md#oh-my-opencode-插件使用指南)。
 
+#### Everything Claude Code 整合
+
+OpenCode 支援 [Everything Claude Code](https://github.com/affaan-m/everything-claude-code) 配置集合，提供經過實戰驗證的 agents、skills、commands 和 rules。
+
+**快速安裝：**
+
+```bash
+# 使用安裝腳本（推薦）
+./scripts/install-everything-claude-code.sh
+
+# 或手動安裝
+# 詳見: docs/everything-claude-code_融合實施計劃_v1.0_20260126_AI.md
+```
+
+**包含的內容：**
+
+- **9 個專業 Agents**: planner（規劃專家）、architect（架構設計專家）、code-reviewer（程式碼審查專家）、security-reviewer（安全審查專家）、build-error-resolver（構建錯誤修復專家）、e2e-runner（E2E 測試專家）、refactor-cleaner（重構清理專家）、doc-updater（文檔更新專家）、tdd-guide（TDD 指南專家）
+- **14 個實用 Commands**: `/plan`（創建實施計劃）、`/tdd`（測試驅動開發）、`/code-review`（程式碼審查）、`/e2e`（E2E 測試生成）、`/build-fix`（修復構建錯誤）、`/refactor-clean`（重構和清理）、`/update-docs`（更新文檔）、`/checkpoint`（保存檢查點）、`/verify`（運行驗證循環）、`/learn`（提取模式）、`/eval`（評估）、`/orchestrate`（編排任務）、`/test-coverage`（測試覆蓋率）、`/update-codemaps`（更新程式碼地圖）、`/setup-pm`（配置套件管理器）
+- **11 個專業 Skills**: backend-patterns（後端模式）、frontend-patterns（前端模式）、tdd-workflow（TDD 工作流程）、security-review（安全審查）、verification-loop（驗證循環）、eval-harness（評估框架）、continuous-learning（持續學習）、strategic-compact（戰略壓縮）、coding-standards（編碼標準）、clickhouse-io（ClickHouse 整合）、project-guidelines-example（專案指南範例）
+- **8 個最佳實踐 Rules**: security（安全規則）、coding-style（編碼風格）、testing（測試規則）、git-workflow（Git 工作流程）、agents（Agents 規則）、performance（效能規則）、memory（記憶體規則）、context（上下文規則）
+- **完整的 Hooks 配置**: 自動化工作流程
+- **MCP 伺服器配置**: GitHub、Supabase、Vercel、Railway 等
+
+詳細文檔請查看 [Everything Claude Code 整合指南](./docs/everything-claude-code_融合實施計劃_v1.0_20260126_AI.md)。
+
 #### Claude SDK Adapter
 
 一個相容層，允許使用 Claude Agent SDK 的介面與 OpenCode 的代理系統互動。完全獨立實現，僅使用 OpenCode 的內部 API - 不依賴 Claude Code 可執行檔案。
